@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kalkulator Tahun Kabisat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+        .calendar-card {
+            transition: all 0.3s ease;
+        }
+        .calendar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .result-box {
+            min-height: 120px;
+            transition: all 0.3s ease;
+        }
+        .glow {
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+                /* Tambahkan warna baru untuk kalender tambahan */
+        .hebrew-card { border-color: #8e44ad; }
+        .hebrew-bg { background-color: #f5eef8; }
+        .chinese-card { border-color: #c0392b; }
+        .chinese-bg { background-color: #fdedec; }
+        .julian-card { border-color: #16a085; }
+        .julian-bg { background-color: #e8f8f5; }
+        .coptic-card { border-color: #f39c12; }
+        .coptic-bg { background-color: #fef5e7; }
+        .javanese-card { border-color: #2c3e50; }
+        .javanese-bg { background-color: #ebedef; }
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+            }
+            to {
+                box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+            }
+        }
+        /* Custom grid untuk lunar hijri yang lebih lebar */
+        .custom-grid {
+            grid-template-columns: 1fr 2fr 1fr;
+        }
+        @media (max-width: 768px) {
+            .custom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-blue-800 mb-2">Kalkulator Tahun Kabisat</h1> 
+            <p class="text-lg text-blue-600 max-w-2xl mx-auto">
+            Cek tahun kabisat pada berbagai sistem kalender dunia dengan referensi <span class="font-semibold text-blue-700">Kitab Badi'atul Mitsal</span>
+            </p>
+        </header>
+
+        <div
+            class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden mb-12"  <!-- Diubah dari max-w-4xl ke max-w-6xl -->
+        >
+            <div class="p-6">
+<div class="flex flex-col md:flex-row gap-4 mb-6">
+    <!-- Input Tahun -->
+    <div class="flex-1">
+        <label for="yearInput" class="block text-sm font-medium text-gray-700 mb-1">
+            Masukkan Tahun
+        </label>
+        <div class="flex">
+            <input
+                type="number"
+                id="yearInput"
+                class="flex-1 rounded-l-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="misal: 2023"
+            />
+            <button
+                id="checkBtn"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition whitespace-nowrap"
+            >
+                <i class="fas fa-search mr-2"></i>Periksa
+            </button>
+        </div>
+    </div>
+
+    <!-- Pilihan Kalender -->
+    <div class="flex-1">
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+            Sistem Kalender
+        </label>
+        <div class="flex flex-wrap gap-2 overflow-x-auto">
+            <button data-calendar="gregorian" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
+                Masehi
+            </button>
+            <button data-calendar="lunar-hijri" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
+                HijriQomr
+            </button>
+            <button data-calendar="solar-hijri" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
+                HijriSyams
+            </button>
+            <button data-calendar="hebrew" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
+                Ibrani
+            </button>
+            <button data-calendar="chinese" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
+                Tionghoa
+            </button>
+            <button data-calendar="julian" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
+                Rumi
+            </button>
+            <button data-calendar="coptic" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
+                Qibti
+            </button>
+            <button data-calendar="javanese" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
+                Jawa
+            </button>
+            <button data-calendar="fushul" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
+                Fushul
+            </button>
+        </div>
+    </div>
+</div>
+
+
+                <div id="resultContainer" class="hidden">
+                    <!-- Mengubah grid layout menjadi custom-grid -->
+                    <div class="custom-grid grid gap-4">
+                        <!-- Gregorian Card -->
+                        <div
+                            id="gregorian-card"
+                            class="calendar-card bg-white border border-blue-200 rounded-xl p-6 shadow-sm"
+                        >
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-100 p-3 rounded-full mr-3">
+                                    <i class="fas fa-calendar-alt text-blue-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-blue-800">Gregorian</h3>
+                            </div>
+                            <div
+                                id="gregorian-result"
+                                class="result-box bg-blue-50 rounded-lg p-4 flex flex-col items-center justify-center"
+                            >
+                                <p class="text-gray-500 text-center">
+                                    Masukkan tahun dan klik periksa
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Lunar Hijri Card - Lebih lebar -->
+                        <div
+                            id="lunar-hijri-card"
+                            class="calendar-card bg-white border border-green-200 rounded-xl p-6 shadow-sm"
+                        >
+                            <div class="flex items-center mb-4">
+                                <div class="bg-green-100 p-3 rounded-full mr-3">
+                                    <i class="fas fa-moon text-green-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-green-800">Hijriyah (Islam)</h3>
+                            </div>
+                            <div
+                                id="lunar-hijri-result"
+                                class="result-box bg-green-50 rounded-lg p-4 flex flex-col items-center justify-center"
+                            >
+                                <p class="text-gray-500 text-center">
+                                    Masukkan tahun dan klik periksa
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Solar Hijri Card -->
+                        <div
+                            id="solar-hijri-card"
+                            class="calendar-card bg-white border border-orange-200 rounded-xl p-6 shadow-sm"
+                        >
+                            <div class="flex items-center mb-4">
+                                <div class="bg-orange-100 p-3 rounded-full mr-3">
+                                    <i class="fas fa-sun text-orange-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-orange-800">Hijriyah (Musiman)</h3>
+                            </div>
+                            <div
+                                id="solar-hijri-result"
+                                class="result-box bg-orange-50 rounded-lg p-4 flex flex-col items-center justify-center"
+                            >
+                                <p class="text-gray-500 text-center">
+                                    Masukkan tahun dan klik periksa
+                                </p>
+                            </div>
+                        </div>
+
+                        <div id="hebrew-card" class="calendar-card bg-white border border-purple-200 rounded-xl p-6 shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-purple-100 p-3 rounded-full mr-3">
+                                    <i class="fas fa-star-of-david text-purple-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-purple-800">Ibrani (Yahudi)</h3>
+                            </div>
+                            <div id="hebrew-result" class="result-box bg-purple-50 rounded-lg p-4 flex flex-col items-center justify-center">
+                                <p class="text-gray-500 text-center">Masukkan tahun dan klik periksa</p>
+                            </div>
+                        </div>
+
+                        <!-- Kalender Tionghoa -->
+                        <div id="chinese-card" class="calendar-card bg-white border border-red-200 rounded-xl p-6 shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-red-100 p-3 rounded-full mr-3">
+                                    <i class="fas fa-dragon text-red-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-red-800">China (Tionghoa)</h3>
+                            </div>
+                            <div id="chinese-result" class="result-box bg-red-50 rounded-lg p-4 flex flex-col items-center justify-center">
+                                <p class="text-gray-500 text-center">Masukkan tahun dan klik periksa</p>
+                            </div>
+                        </div>
+
+                        <!-- Julian Card -->
+                        <div id="julian-card" class="calendar-card bg-white border border-teal-200 rounded-xl p-6 shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-teal-100 p-3 rounded-full mr-3">
+                                    <i class="fas fa-church text-teal-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-teal-800">Rumi (Ottoman)</h3>
+                            </div>
+                            <div id="julian-result" class="result-box bg-teal-50 rounded-lg p-4 flex flex-col items-center justify-center">
+                                <p class="text-gray-500 text-center">Masukkan tahun dan klik periksa</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Coptic Card -->
+                        <div id="coptic-card" class="calendar-card bg-white border border-amber-200 rounded-xl p-6 shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-amber-100 p-3 rounded-full mr-3">
+                                    <i class="fas fa-cross text-amber-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-amber-800">Qibti (Koptik)</h3>
+                            </div>
+                            <div id="coptic-result" class="result-box bg-amber-50 rounded-lg p-4 flex flex-col items-center justify-center">
+                                <p class="text-gray-500 text-center">Masukkan tahun dan klik periksa</p>
+                            </div>
+                        </div>
+
+                        <!-- Lunar Jawa Card - Disesuaikan -->
+                        <div
+                            id="javanese-card"
+                            class="calendar-card bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm"
+                        >
+                            <div class="flex items-center mb-4">
+                                <div class="bg-gray-200 p-3 rounded-full mr-3">
+                                    <i class="fas fa-mountain text-gray-700 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-gray-700">Jawa</h3>
+                            </div>
+                            <div
+                                id="lunar-jawa-result"
+                                class="result-box bg-white border border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center"
+                            >
+                                <p class="text-gray-500 text-center">
+                                    Masukkan tahun dan klik periksa
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Fushul Jawiyah Card - Disesuaikan -->
+                        <div
+                            id="fushul-card"
+                            class="calendar-card bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-sm"
+                        >
+                            <div class="flex items-center mb-4">
+                                <div class="bg-yellow-200 p-3 rounded-full mr-3">
+                                    <i class="fas fa-seedling text-yellow-700 text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-yellow-800">Fushul Jawiyah</h3>
+                            </div>
+                            <div
+                                id="fushul-result"
+                                class="result-box bg-white border border-dashed border-yellow-300 rounded-lg p-4 flex flex-col items-center justify-center"
+                            >
+                                <p class="text-yellow-600 text-center">Masukkan tahun dan klik periksa</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden"  <!-- Diubah dari max-w-4xl ke max-w-6xl -->
+        >
+<div class="p-6">
+    <h2 class="text-2xl font-bold text-blue-800 mb-4">
+        Tentang Tahun Kabisat
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Gregorian -->
+        <div id="gregorian-info" class="bg-blue-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-blue-700 mb-2 flex items-center">
+                <i class="fas fa-calendar-alt mr-2"></i> Masehi (Gregorian)
+            </h3>
+            <p class="text-gray-700 text-sm">
+                Kalender Masehi (Gregorian) menggunakan aturan berikut: tahun kabisat terjadi setiap 4 tahun. 
+                Namun, jika tahun tersebut habis dibagi 100, maka bukan kabisat — <strong>kecuali</strong> juga habis dibagi 400. 
+                Misalnya, tahun <strong>2000</strong> adalah kabisat (karena habis dibagi 400), 
+                sedangkan <strong>1900</strong> bukan kabisat (karena habis dibagi 100 tapi tidak 400).
+            </p>
+        </div>
+
+        <!-- Lunar Hijri -->
+        <div id="lunar-hijri-info" class="bg-green-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-green-700 mb-2 flex items-center">
+                <i class="fas fa-moon mr-2"></i> Hijriyah (Islam)
+            </h3>
+            <p class="text-gray-700 text-sm">
+                Kalender Hijriyah Qamariyah (lunar hijri) memiliki tahun kabisat sebanyak 11 kali dalam siklus 30 tahun.
+                Tahun kabisat memiliki <strong>355 hari</strong> (dengan menambahkan 1 hari di bulan Dzulhijjah),
+                dibanding tahun basithah yang memiliki <strong>354 hari</strong>.
+                Terdapat dua pendapat utama tentang posisi tahun kabisat:
+            </p>
+            <ul class="text-gray-700 text-sm mt-2 pl-5 list-disc">
+                <li class="mb-1">
+                    <strong>Pendapat Mushannif</strong> (tahun ke-15 sebagai kabisat):
+                    <div class="bg-green-50 p-2 rounded mt-1 text-xs">
+                        Siklus: <strong>2, 5, 7, 10, 13, 15, 18, 21, 24, 26, 29</strong>
+                    </div>
+                </li>
+                <li>
+                    <strong>Pendapat Ba'duhum</strong> (tahun ke-16 sebagai kabisat):
+                    <div class="bg-green-50 p-2 rounded mt-1 text-xs">
+                        Siklus: <strong>2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29</strong>
+                    </div>
+                </li>
+            </ul>
+            <p class="text-gray-700 text-sm mt-2">
+                Perbedaan hanya pada posisi tahun ke-15 atau 16, sementara posisi lainnya sama.
+                Tahun kabisat menambahkan 1 hari di akhir bulan Dzulhijjah (menjadi 30 hari).
+            </p>
+        </div>
+
+        <!-- Solar Hijri -->
+        <div id="solar-hijri-info" class="bg-orange-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-orange-700 mb-2 flex items-center">
+                <i class="fas fa-sun mr-2"></i> Hijriyah (Musiman)
+            </h3>
+            <p class="text-gray-700 text-sm">
+                Kalender Hijriyah Syamsiyah (solar hijri) adalah sistem kalender musiman Arab tradisional yang membagi tahun menjadi 12 musim 
+                (12 periode dalam 4 musim: gugur, dingin, semi, & panas). Kalender ini memiliki aturan bahwa tahun kabisat adalah tahun 
+                yang habis dibagi 4. Namun, ada pengecualian: <strong>jika juga habis dibagi 128</strong>, maka <u>tidak dianggap kabisat</u>.
+                Sebuah siklus kabisat terjadi setiap 33 tahun dengan pola berikut:
+            </p>
+            <div class="bg-orange-50 border-l-4 border-orange-300 px-3 py-2 my-2 text-sm">
+                <strong>Siklus 33 Tahun:</strong> Tahun kabisat terjadi ketika posisi tahun dalam siklus (tahun % 33) adalah:<br>
+                <strong>1, 5, 9, 13, 17, 22, 26, 30.</strong>
+                Tahun kabisat menambahkan 1 hari di akhir musim panas (menjadi 31 hari).
+            </div>
+            <p class="text-gray-700 text-sm mt-2">
+                <strong>Catatan:</strong> Berlaku di wilayah Jazirah Arab dan sekitarnya, sehingga 
+                tidak berfungsi secara akurat di wilayah subtropis atau beriklim sedang karena perbedaan pola musim.
+            </p>
+        </div>
+
+        <!-- Penjelasan Kalender Baru -->
+        <div id="hebrew-info" class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-purple-700 mb-2 flex items-center">
+                            <i class="fas fa-star-of-david mr-2"></i> Ibrani (Yahudi)
+                        </h3>
+                        <p class="text-gray-700 text-sm">
+                            Kalender Ibrani menambahkan bulan ke-13 (Adar II) 7 kali dalam siklus 19 tahun.
+                            Tahun kabisat terjadi pada tahun ke: <strong>3, 6, 8, 11, 14, 17, 19</strong>.
+                            Sistem ini menjaga keselarasan antara tahun lunar dan solar.
+                        </p>
+        </div>
+
+        <div id="chinese-info" class="bg-red-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-red-700 mb-2 flex items-center">
+                            <i class="fas fa-dragon mr-2"></i> China (Tionghoa)
+                        </h3>
+                        <p class="text-gray-700 text-sm">
+                            Kalender Tionghoa menambahkan bulan ke-13 dalam siklus 19 tahun (mirip Ibrani).
+                            Tahun kabisat ditentukan oleh aturan astronomi kompleks yang mempertimbangkan:
+                            <strong>posisi matahari</strong> dan <strong>fase bulan</strong>.
+                        </p>
+        </div>
+
+        <!-- Julian / Rumi -->
+        <div id="julian-info" class="bg-teal-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-teal-700 mb-2 flex items-center">
+                <i class="fas fa-mosque mr-2"></i> Rumi (Ottoman)
+            </h3>
+            <p class="text-gray-700 text-sm">
+                Kalender Rumi adalah versi dari kalender Julian yang digunakan dalam administrasi Kesultanan Utsmaniyah,
+                dengan nama-nama bulan yang diadopsi dari tradisi Suryani (Levant). 
+                Tahun kabisat terjadi setiap 4 tahun tanpa pengecualian, dengan satu hari tambahan yang ditambahkan pada bulan <strong>Syibat</strong> (setara dengan Februari).
+                Saat ini, kalender Julian memiliki selisih sekitar 13 hari dibandingkan kalender Gregorian.
+            </p>
+        </div>
+
+        <!-- Qibti -->
+        <div id="coptic-info" class="bg-amber-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-amber-700 mb-2 flex items-center">
+                <i class="fas fa-cross mr-2"></i> Qibti (Koptik)
+            </h3>
+            <p class="text-gray-700 text-sm">
+                Kalender Qibti adalah sistem penanggalan matahari yang berasal dari Mesir kuno dan diadopsi oleh Gereja Ortodoks Koptik. 
+                Sistem ini terdiri dari 12 bulan masing-masing 30 hari, ditambah 5 atau 6 hari tambahan yang disebut 
+                <strong>Ayyām al-Nasī’</strong> sebagai bulan ke-13. Kalender ini mirip dengan kalender Julian, tetapi tahun pertamanya dimulai pada 284 M.
+                Tahun kabisat terjadi setiap 4 tahun sekali, yaitu ketika tahun Qibti habis dibagi 4.
+            </p>
+        </div>
+
+        <!-- Jawa -->
+        <div id="javanese-info" class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-gray-700 mb-2 flex items-center">
+                <i class="fas fa-mountain mr-2"></i> Jawa
+            </h3>
+            <p class="text-gray-700 text-sm">
+                Kalender Jawa adalah sistem penanggalan bulan (lunar) yang disusun oleh Sultan Agung Mataram pada abad ke-17, 
+                dengan menggabungkan struktur kalender Hijriyah dan unsur budaya lokal Jawa. 
+                Bulan-bulannya mengikuti perhitungan lunar seperti Hijriyah, namun menggunakan nama-nama khas seperti Sura, Sapar, Mulud, dan seterusnya. 
+                Kalender ini juga memiliki sistem pekan ganda: tujuh hari umum dan lima hari pasaran (Legi, Pahing, Pon, Wage, Kliwon).
+            </p>
+        </div>
+        
+        <!-- Fushul Jawiyah (Pranata Mangsa) -->
+        <div id="fushul-info" class="bg-yellow-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-yellow-700 mb-2 flex items-center">
+                <i class="fas fa-seedling mr-2"></i> Fushul Jawiyah
+            </h3>
+            <p class="text-gray-700 text-sm">
+                Kalender Fushul Jawiyah, atau dikenal sebagai Pranata Mangsa, adalah sistem penanggalan musim tradisional Jawa
+                yang terdiri dari 12 mangsa (musim) dengan jumlah hari bervariasi, dimulai dari <strong>Kasa</strong> hingga <strong>Sadha</strong>.
+                Jumlah hari dalam satu tahun adalah 365 hari (basithah), namun setiap empat tahun sekali ditambahkan 1 hari ekstra pada bulan <strong>Sadha</strong>,
+                sehingga menjadi tahun kabisat (366 hari). Kalender ini digunakan dalam pertanian, perikanan, dan kebudayaan agraris masyarakat Jawa.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+        </div>
+    </div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const yearInput = document.getElementById("yearInput");
+    const checkBtn = document.getElementById("checkBtn");
+    const resultContainer = document.getElementById("resultContainer");
+    const calendarTabs = document.querySelectorAll(".calendar-tab");
+    const allCards = document.querySelectorAll(".calendar-card");
+    const calendarList = [
+        "gregorian", "lunar-hijri", "solar-hijri", "hebrew",
+        "chinese", "julian", "coptic", "javanese", "fushul"
+    ];
+
+    let currentCalendar = "";
+    let hasChecked = false;
+
+    // Set tahun sekarang sebagai default
+    yearInput.value = new Date().getFullYear();
+
+    // Event: Klik tab kalender
+    calendarTabs.forEach(tab => {
+        tab.addEventListener("click", function () {
+            const calendar = this.dataset.calendar;
+            const isActive = this.classList.contains("active");
+
+            // Reset gaya semua tab
+            calendarTabs.forEach(t => {
+                t.classList.remove("active", "bg-blue-600", "text-white", "opacity-100");
+                t.classList.add("opacity-50", "bg-gray-200", "hover:bg-gray-300");
+            });
+
+            if (isActive) {
+                currentCalendar = "";
+            } else {
+                currentCalendar = calendar;
+                this.classList.remove("bg-gray-200", "hover:bg-gray-300", "opacity-50");
+                this.classList.add("active", "bg-blue-600", "text-white", "opacity-100");
+            }
+
+            if (hasChecked) {
+                showSelectedCard();
+                toggleInfoCards();
+            }
+        });
+    });
+
+    // Event: Klik tombol "Periksa"
+    checkBtn.addEventListener("click", function () {
+        const year = parseInt(yearInput.value.trim());
+        if (isNaN(year) || year <= 0) {
+            alert("Masukkan tahun yang valid.");
+            return;
+        }
+
+        hasChecked = true;
+        resultContainer.classList.remove("hidden");
+
+        runLeapYearChecks(year);
+        showSelectedCard();
+        toggleInfoCards();
+    });
+
+    // Jalankan semua pemeriksaan tahun kabisat
+    function runLeapYearChecks(year) {
+        checkGregorianLeapYear(year);
+        checkLunarHijriLeapYear(year);
+        checkHebrewLeapYear(year);
+        checkChineseLeapYear(year);
+        checkJulianLeapYear(year);
+        checkCopticLeapYear(year);
+        checkSolarHijriLeapYear(year);
+        checkLunarJawaLeapYear(year);
+        checkFushulLeapYear(year);
+    }
+
+    // Tampilkan hanya kartu yang sesuai
+    function showSelectedCard() {
+        allCards.forEach(card => {
+            card.classList.add("hidden");
+            card.className = card.className.replace(/border-\w+-400/g, '');
+            card.classList.remove("glow");
+        });
+
+        if (!currentCalendar) {
+            allCards.forEach(card => card.classList.remove("hidden"));
+            return;
+        }
+
+        const selected = document.getElementById(`${currentCalendar}-card`);
+        if (selected) {
+            selected.classList.remove("hidden");
+            selected.classList.add("glow");
+
+            const borderColors = {
+                "gregorian": "border-blue-400",
+                "lunar-hijri": "border-green-400",
+                "solar-hijri": "border-blue-400",
+                "hebrew": "border-purple-400",
+                "chinese": "border-red-400",
+                "julian": "border-teal-400",
+                "coptic": "border-amber-400",
+                "javanese": "border-gray-400",
+                "fushul": "border-gray-400"
+            };
+
+            selected.classList.add(borderColors[currentCalendar] || "border-gray-400");
+        }
+    }
+
+    // Tampilkan info-card penjelasan sesuai tab atau semua
+    function toggleInfoCards() {
+        calendarList.forEach(id => {
+            const el = document.getElementById(`${id}-info`);
+            if (el) {
+                if (!currentCalendar || currentCalendar === id) {
+                    el.classList.remove("hidden");
+                } else {
+                    el.classList.add("hidden");
+                }
+            }
+        });
+    }
+    
+            // Cek tahun kabisat Gregorian (Masehi)
+            function checkGregorianLeapYear(year) {
+                const isLeap =
+                    (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+                const resultDiv = document.getElementById("gregorian-result");
+
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
+                        <div class="text-4xl mb-2 ${
+                            isLeap ? "text-blue-600" : "text-gray-500"
+                        }">
+                            ${
+                                isLeap
+                                    ? '<i class="fas fa-check-circle"></i>'
+                                    : '<i class="fas fa-times-circle"></i>'
+                            }
+                        </div>
+                        <p class="${
+                            isLeap ? "text-blue-600 font-medium" : "text-gray-600"
+                        }">
+                            ${
+                                isLeap
+                                    ? "Ini adalah tahun kabisat"
+                                    : "Ini adalah tahun basithah"
+                            }
+                        </p>
+                        ${
+                            !isLeap
+                                ? `<p class="text-sm text-gray-500 mt-2">Tahun kabisat berikutnya: ${findNextGregorianLeapYear(
+                                      year
+                                  )}</p>`
+                                : ""
+                        }
+                    </div>
+                `;
+            }
+
+            // Cek tahun kabisat Lunar Hijri (Qomariyah)
+            function checkLunarHijriLeapYear(year) {
+                // Pendapat kitab Badiatul Mistsal (tahun kabisat ke 15)
+                const leapYearsBadiatul = [2, 5, 7, 10, 13, 15, 18, 21, 24, 26, 29];
+                // Pendapat Ba'duhum (tahun kabisat ke 16)
+                const leapYearsBaDuhum = [2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29];
+                
+                const positionInCycle = year % 30 || 30; // Posisi dalam siklus 30 tahun (1-30)
+                
+                const isLeapBadiatul = leapYearsBadiatul.includes(positionInCycle);
+                const isLeapBaDuhum = leapYearsBaDuhum.includes(positionInCycle);
+
+                const resultDiv = document.getElementById("lunar-hijri-result");
+
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <p class="text-lg font-semibold mb-2">Tahun ${year}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-lg border ${isLeapBadiatul ? 'border-green-600 bg-green-50' : 'border-gray-300 bg-gray-100'}">
+                                <h4 class="font-semibold mb-1 text-green-700">Pendapat Mushannif</h4>
+                                <div class="text-3xl mb-2 ${isLeapBadiatul ? 'text-green-600' : 'text-gray-500'}">
+                                    ${isLeapBadiatul ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
+                                </div>
+                                <p class="${isLeapBadiatul ? 'text-green-600 font-medium' : 'text-gray-600'}">
+                                    ${isLeapBadiatul ? "Ini adalah tahun kabisat (355 hari)" : "Ini adalah tahun basithah (354 hari)"}
+                                </p>
+                                <p class="text-sm text-gray-500 mt-1">Posisi dalam siklus 30 tahun: ${positionInCycle}</p>
+                            </div>
+                            <div class="p-4 rounded-lg border ${isLeapBaDuhum ? 'border-green-600 bg-green-50' : 'border-gray-300 bg-gray-100'}">
+                                <h4 class="font-semibold mb-1 text-green-700">Pendapat Ba'duhum</h4>
+                                <div class="text-3xl mb-2 ${isLeapBaDuhum ? 'text-green-600' : 'text-gray-500'}">
+                                    ${isLeapBaDuhum ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
+                                </div>
+                                <p class="${isLeapBaDuhum ? 'text-green-600 font-medium' : 'text-gray-600'}">
+                                    ${isLeapBaDuhum ? "Ini adalah tahun kabisat (355 hari)" : "Ini adalah tahun basithah (354 hari)"}
+                                </p>
+                                <p class="text-sm text-gray-500 mt-1">Posisi dalam siklus 30 tahun: ${positionInCycle}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Cek tahun kabisat Solar Hijri (Syamsiyah)
+            function checkSolarHijriLeapYear(year) {
+                // Tahun kabisat Solar Hijri mengikuti siklus 33 tahun dengan 8 tahun kabisat
+                // Tahun kabisat adalah tahun yang memiliki sisa pembagian 1, 5, 9, 13, 17, 22, 26, atau 30 saat dibagi 33
+                const remainder = year % 33;
+                const isLeap = [1, 5, 9, 13, 17, 22, 26, 30].includes(remainder);
+
+                const resultDiv = document.getElementById("solar-hijri-result");
+
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
+                        <div class="text-4xl mb-2 ${
+                            isLeap ? "text-orange-600" : "text-gray-500"
+                        }">
+                            ${
+                                isLeap
+                                    ? '<i class="fas fa-check-circle"></i>'
+                                    : '<i class="fas fa-times-circle"></i>'
+                            }
+                        </div>
+                        <p class="${
+                            isLeap ? "text-orange-600 font-medium" : "text-gray-600"
+                        }">
+                            ${
+                                isLeap
+                                    ? "Ini adalah tahun kabisat (366 hari)"
+                                    : "Ini adalah tahun basithah (365 hari)"
+                            }
+                        </p>
+                        <p class="text-sm text-gray-500 mt-2">Posisi dalam siklus 33 tahun: ${remainder}</p>
+                    </div>
+                `;
+            }
+
+            // Fungsi baru untuk kalender tambahan
+            function checkHebrewLeapYear(year) {
+                // Siklus Metonik: tahun kabisat pada posisi 3,6,8,11,14,17,19
+                const isLeap = [3,6,8,11,14,17,19].includes(year % 19 || 19);
+                document.getElementById("hebrew-result").innerHTML = `
+                    <div class="text-center">
+                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
+                        <div class="text-4xl mb-2 ${isLeap ? "text-purple-600" : "text-gray-500"}">
+                            ${isLeap ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
+                        </div>
+                        <p class="${isLeap ? "text-purple-600 font-medium" : "text-gray-600"}">
+                            ${isLeap ? "Ini adalah tahun kabisat (13 bulan)" : "Ini adalah Tahun basithah (12 bulan)"}
+                        </p>
+                    </div>
+                `;
+            }
+
+            function checkChineseLeapYear(year) {
+                // Perhitungan kompleks - disederhanakan dengan siklus 19 tahun
+                const isLeap = [3,6,9,11,14,17,19].includes(year % 19 || 19);
+                document.getElementById("chinese-result").innerHTML = `
+                    <div class="text-center">
+                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
+                        <div class="text-4xl mb-2 ${isLeap ? "text-red-600" : "text-gray-500"}">
+                            ${isLeap ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
+                        </div>
+                        <p class="${isLeap ? "text-red-600 font-medium" : "text-gray-600"}">
+                            ${isLeap ? "Ini adalah tahun kabisat (13 bulan)" : "Ini adalah Tahun basithah (12 bulan)"}
+                        </p>
+                    </div>
+                `;
+            }
+
+            function checkJulianLeapYear(year) {
+                const isLeap = year % 4 === 0;
+                const resultDiv = document.getElementById("julian-result");
+                displayResult(resultDiv, year, isLeap, "teal", "Ini adalah tahun kabisat (366 hari)", "Ini adalah tahun basithah (365 hari)");
+            }
+
+            function checkCopticLeapYear(year) {
+                // Tahun Coptic dimulai 284 M, kabisat ketika (tahun + 1) habis dibagi 4
+                const isLeap = (year + 1) % 4 === 0;
+                const resultDiv = document.getElementById("coptic-result");
+                displayResult(resultDiv, year, isLeap, "amber", "Ini adalah tahun kabisat (366 hari)", "Ini adalah tahun basithah (365 hari)");
+            }
+
+            // Fungsi bantu untuk menampilkan hasil
+            function displayResult(div, year, isLeap, color, trueMsg, falseMsg) {
+                div.innerHTML = `
+                    <div class="text-center">
+                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
+                        <div class="text-4xl mb-2 ${isLeap ? `text-${color}-600` : "text-gray-500"}">
+                            ${isLeap ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
+                        </div>
+                        <p class="${isLeap ? `text-${color}-600 font-medium` : "text-gray-600"}">
+                            ${isLeap ? trueMsg : falseMsg}
+                        </p>
+                    </div>
+                `;
+            }
+
+        // Cek tahun kabisat Kalender Hijriyah Lunar versi Kalender Jawa
+        function checkLunarJawaLeapYear(year) {
+            // Pendapat dalam Kitab Badi'atu al-Mitsal (tahun kabisat ke-15)
+            const leapYearsMushannif = [2, 5, 7, 10, 13, 15, 18, 21, 24, 26, 29];
+
+            // Pendapat Ba’duhum (tahun kabisat ke-16)
+            const leapYearsBaduhum = [2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29];
+
+            const positionInCycle = year % 30 || 30; // Posisi dalam siklus 30 tahun
+
+            const isLeapMushannif = leapYearsMushannif.includes(positionInCycle);
+            const isLeapBaduhum = leapYearsBaduhum.includes(positionInCycle);
+
+            const resultDiv = document.getElementById("lunar-jawa-result");
+
+            resultDiv.innerHTML = `
+                <div class="text-center">
+                    <p class="text-lg font-semibold mb-2">Tahun ${year}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Pendapat Mushannif -->
+                        <div class="p-4 rounded-lg border ${isLeapMushannif ? 'border-green-600 bg-green-50' : 'border-gray-300 bg-gray-100'}">
+                            <h4 class="font-semibold mb-1 text-green-700">Pendapat Mushannif</h4>
+                            <div class="text-3xl mb-2 ${isLeapMushannif ? 'text-green-600' : 'text-gray-500'}">
+                                ${isLeapMushannif ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
+                            </div>
+                            <p class="${isLeapMushannif ? 'text-green-600 font-medium' : 'text-gray-600'}">
+                                ${isLeapMushannif ? "Ini adalah tahun kabisat (355 hari)" : "Ini adalah tahun basithah (354 hari)"}
+                            </p>
+                            <p class="text-sm text-gray-500 mt-1">Posisi dalam siklus 30 tahun: ke-${positionInCycle}</p>
+                        </div>
+
+                        <!-- Pendapat Ba'duhum -->
+                        <div class="p-4 rounded-lg border ${isLeapBaduhum ? 'border-green-600 bg-green-50' : 'border-gray-300 bg-gray-100'}">
+                            <h4 class="font-semibold mb-1 text-green-700">Pendapat Ba’duhum</h4>
+                            <div class="text-3xl mb-2 ${isLeapBaduhum ? 'text-green-600' : 'text-gray-500'}">
+                                ${isLeapBaduhum ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
+                            </div>
+                            <p class="${isLeapBaduhum ? 'text-green-600 font-medium' : 'text-gray-600'}">
+                                ${isLeapBaduhum ? "Ini adalah tahun kabisat (355 hari)" : "Ini adalah tahun basithah (354 hari)"}
+                            </p>
+                            <p class="text-sm text-gray-500 mt-1">Posisi dalam siklus 30 tahun: ke-${positionInCycle}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Cek tahun kabisat Fushul Jawiyah (Pranata Mangsa)
+        function checkFushulLeapYear(year) {
+            const isLeap = year % 4 === 0;
+            const resultDiv = document.getElementById("fushul-result");
+
+            resultDiv.innerHTML = `
+                <div class="text-center">
+                    <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
+                    <div class="text-4xl mb-2 ${isLeap ? "text-yellow-600" : "text-gray-500"}">
+                        ${
+                            isLeap
+                                ? '<i class="fas fa-check-circle"></i>'
+                                : '<i class="fas fa-times-circle"></i>'
+                        }
+                    </div>
+                    <p class="${isLeap ? "text-yellow-600 font-medium" : "text-gray-600"}">
+                        ${
+                            isLeap
+                                ? "Ini adalah tahun kabisat (Sadha = 42 hari)"
+                                : "Ini adalah tahun basithah (Sadha = 41 hari)"
+                        }
+                    </p>
+                    ${
+                        !isLeap
+                            ? `<p class="text-sm text-gray-500 mt-2">Tahun kabisat berikutnya: ${findNextFushulLeapYear(year)}</p>`
+                            : ""
+                    }
+                </div>
+            `;
+        }
+
+        // Cari tahun kabisat berikutnya (Fushul Jawiyah: tiap 4 tahun)
+        function findNextFushulLeapYear(currentYear) {
+            let next = currentYear + 1;
+            while (next % 4 !== 0) {
+                next++;
+            }
+            return next;
+        }
+
+            // Fungsi bantu untuk mencari tahun kabisat Gregorian berikutnya
+            function findNextGregorianLeapYear(year) {
+                let nextYear = year + 1;
+                while (true) {
+                    if (
+                        (nextYear % 4 === 0 && nextYear % 100 !== 0) ||
+                        nextYear % 400 === 0
+                    ) {
+                        return nextYear;
+                    }
+                    nextYear++;
+                }
+            }
+
+
+        });
+    </script>
+</body>
+</html>
