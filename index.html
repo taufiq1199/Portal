@@ -4,11 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Kalkulator Tahun Kabisat</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://github.com/taufiq1199/falak/blob/main/sata.jpg?raw=true" type="image/jpeg" />
+
+    <!-- Open Graph Meta Tags (Facebook, WhatsApp, dll) -->
+    <meta property="og:title" content="Perhitungan Tahun Kabisat" />
+    <meta property="og:description" content="Cek apakah suatu tahun merupakan tahun kabisat dalam berbagai sistem kalender." />
+    <meta property="og:image" content="https://github.com/taufiq1199/falak/blob/main/sata.jpg?raw=true" />
+    <meta property="og:url" content="https://example.com/" /> <!-- Ganti dengan URL asli jika tersedia -->
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Perhitungan Tahun Kabisat" />
+    <meta name="twitter:description" content="Cek kabisat: Gregorian, Hijriyah, Ibrani, Tionghoa, Rumi, Qibti, Jawa." />
+    <meta name="twitter:image" content="https://github.com/taufiq1199/falak/blob/main/sata.jpg?raw=true" />
     <style>
         .calendar-card {
             transition: all 0.3s ease;
@@ -57,7 +74,7 @@
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <header class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-blue-800 mb-2">Perhitungan Tahun Kabisat</h1> 
+            <h1 class="text-4xl font-bold text-blue-800 mb-2">Kalkulator Tahun Kabisat</h1> 
             <p class="text-lg text-blue-600 max-w-2xl mx-auto">
             Cek tahun kabisat pada berbagai sistem kalender dunia dengan referensi <span class="font-semibold text-blue-700">Kitab Badi'atul Mitsal</span>
             </p>
@@ -565,7 +582,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-    
+
             // Cek tahun kabisat Gregorian (Masehi)
             function checkGregorianLeapYear(year) {
                 const isLeap =
