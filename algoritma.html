@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator Trigonometri</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-light: #bfdbfe;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --error: #ef4444;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-light);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      background-color: var(--card-bg);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex: 1;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .result-container {
+      margin-top: 24px;
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    th {
+      background-color: var(--primary);
+      color: white;
+      font-weight: 500;
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(59, 130, 246, 0.05);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 16px;
+      }
+      
+      .input-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>
+    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+    </svg>
+    Kalkulator Trigonometri
+  </h1>
+  <p class="text-light">Hitung nilai logaritma & trigonometri dengan presisi tinggi</p>
+
+  <div class="card">
+    <h2 class="card-title">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+      </svg>
+      Hitung Nilai Trigonometri
+    </h2>
+    
+    <div class="input-grid">
+      <div class="input-group">
+        <label for="derajat">Derajat (°)</label>
+        <input type="number" id="derajat" placeholder="0" min="0">
+      </div>
+      <div class="input-group">
+        <label for="menit">Menit (′)</label>
+        <input type="number" id="menit" placeholder="0" min="0" max="59">
+      </div>
+      <div class="input-group">
+        <label for="detik">Detik (″)</label>
+        <input type="number" id="detik" placeholder="0" min="0" max="59">
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button onclick="hitungLog()">
+        Log Trigonometri
+      </button>
+      <button onclick="hitungNilai()">
+        Trigonometri
+      </button>
+    </div>
+
+    <div id="resultLog" class="result-container">
+      <h3>Hasil Logaritma Trigonometri</h3>
+      <table id="tabelLog">
+        <thead>
+          <tr>
+            <th>Fungsi</th>
+            <th>Nilai</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Sudut Desimal</td>
+            <td id="sudutLog"></td>
+          </tr>
+          <tr>
+            <td>log sin</td>
+            <td id="logSin"></td>
+          </tr>
+          <tr>
+            <td>log cos</td>
+            <td id="logCos"></td>
+          </tr>
+          <tr>
+            <td>log tg</td>
+            <td id="logTg"></td>
+          </tr>
+          <tr>
+            <td>log cotg</td>
+            <td id="logCotg"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="resultNilai" class="result-container">
+      <h3>Hasil Nilai Trigonometri</h3>
+      <table id="tabelNilai">
+        <thead>
+          <tr>
+            <th>Fungsi</th>
+            <th>Nilai</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Sudut Desimal</td>
+            <td id="sudutNilai"></td>
+          </tr>
+          <tr>
+            <td>sin</td>
+            <td id="valSin"></td>
+          </tr>
+          <tr>
+            <td>cos</td>
+            <td id="valCos"></td>
+          </tr>
+          <tr>
+            <td>tg</td>
+            <td id="valTg"></td>
+          </tr>
+          <tr>
+            <td>cotg</td>
+            <td id="valCotg"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+      </svg>
+      Konversi Nilai ke Sudut
+    </h2>
+    
+    <div class="input-group">
+      <label for="jenisFungsi">Pilih Fungsi</label>
+      <select id="jenisFungsi">
+        <option value="sin">sin</option>
+        <option value="cos">cos</option>
+        <option value="tg">tg</option>
+        <option value="cotg">cotg</option>
+        <option value="logsin">log sin</option>
+        <option value="logcos">log cos</option>
+        <option value="logtg">log tg</option>
+        <option value="logcotg">log cotg</option>
+      </select>
+    </div>
+    
+    <div class="input-group">
+      <label for="nilaiInput">Nilai atau Logaritma</label>
+      <input type="number" step="0.00001" id="nilaiInput" placeholder="Contoh: 0.02618 atau 8.41792">
+    </div>
+    
+    <button onclick="konversiKeSudut()">
+      Konversi
+    </button>
+    
+    <div id="resultSudut" class="result-container">
+      <h3>Hasil Konversi Sudut</h3>
+      <table id="tabelSudut">
+        <thead>
+          <tr>
+            <th>Komponen</th>
+            <th>Nilai</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Derajat</td>
+            <td id="hasilDerajat"></td>
+          </tr>
+          <tr>
+            <td>Menit</td>
+            <td id="hasilMenit"></td>
+          </tr>
+          <tr>
+            <td>Detik</td>
+            <td id="hasilDetik"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function toLogBrigg(x) {
+      if (x <= 0) return "Tidak terdefinisi";
+      const logVal = Math.log10(x);
+      return logVal < 0 ? (10 + logVal).toFixed(5) : logVal.toFixed(5);
+    }
+
+    function logCotgBrigg(tanVal) {
+      if (tanVal <= 0) return "Tidak terdefinisi";
+      const logTan = Math.log10(tanVal);
+      return (10 - logTan).toFixed(5);
+    }
+
+    function getSudutDesimal() {
+      const d = parseFloat(document.getElementById("derajat").value) || 0;
+      const m = parseFloat(document.getElementById("menit").value) || 0;
+      const s = parseFloat(document.getElementById("detik").value) || 0;
+      return d + (m / 60) + (s / 3600);
+    }
+
+    function hitungLog() {
+      const sudut = getSudutDesimal();
+      const rad = sudut * Math.PI / 180;
+      const sin = Math.sin(rad);
+      const cos = Math.cos(rad);
+      const tan = Math.tan(rad);
+
+      document.getElementById("sudutLog").innerText = sudut.toFixed(6) + "°";
+      document.getElementById("logSin").innerText = toLogBrigg(sin);
+      document.getElementById("logCos").innerText = toLogBrigg(cos);
+      document.getElementById("logTg").innerText = toLogBrigg(Math.abs(tan));
+      document.getElementById("logCotg").innerText = logCotgBrigg(Math.abs(tan));
+
+      document.getElementById("resultLog").style.display = "block";
+      document.getElementById("resultNilai").style.display = "none";
+    }
+
+    function hitungNilai() {
+      const sudut = getSudutDesimal();
+      const rad = sudut * Math.PI / 180;
+      const sin = Math.sin(rad);
+      const cos = Math.cos(rad);
+      const tan = Math.tan(rad);
+      const cotg = tan !== 0 ? 1 / tan : "Tidak terdefinisi";
+
+      document.getElementById("sudutNilai").innerText = sudut.toFixed(6) + "°";
+      document.getElementById("valSin").innerText = sin.toFixed(5);
+      document.getElementById("valCos").innerText = cos.toFixed(5);
+      document.getElementById("valTg").innerText = tan.toFixed(5);
+      document.getElementById("valCotg").innerText = typeof cotg === "string" ? cotg : cotg.toFixed(5);
+
+      document.getElementById("resultNilai").style.display = "block";
+      document.getElementById("resultLog").style.display = "none";
+    }
+
+    function konversiKeSudut() {
+      const jenis = document.getElementById("jenisFungsi").value;
+      let nilai = parseFloat(document.getElementById("nilaiInput").value);
+      if (isNaN(nilai)) {
+        alert("Masukkan nilai yang valid!");
+        return;
+      }
+
+      if (jenis.startsWith("log")) {
+        const mantisa = nilai - 10;
+        nilai = Math.pow(10, mantisa);
+      }
+
+      let rad = 0;
+      if (jenis === "sin" || jenis === "logsin") rad = Math.asin(nilai);
+      else if (jenis === "cos" || jenis === "logcos") rad = Math.acos(nilai);
+      else if (jenis === "tg" || jenis === "logtg") rad = Math.atan(nilai);
+      else if (jenis === "cotg" || jenis === "logcotg") rad = Math.atan(1 / nilai);
+
+      const sudut = rad * 180 / Math.PI;
+      const d = Math.floor(sudut);
+      const mFloat = (sudut - d) * 60;
+      const m = Math.floor(mFloat);
+      const s = ((mFloat - m) * 60).toFixed(2);
+
+      document.getElementById("hasilDerajat").innerText = `${d}°`;
+      document.getElementById("hasilMenit").innerText = `${m}′`;
+      document.getElementById("hasilDetik").innerText = `${s}″`;
+      document.getElementById("resultSudut").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
