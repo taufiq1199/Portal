@@ -1,867 +1,1382 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tahun Kabisat</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-    <!-- Favicon -->
-    <link rel="icon" href="https://github.com/taufiq1199/falak/blob/main/sata.jpg?raw=true" type="image/jpeg" />
-
-    <!-- Open Graph Meta Tags (Facebook, WhatsApp, dll) -->
-    <meta property="og:title" content="Perhitungan Tahun Kabisat" />
-    <meta property="og:description" content="Untuk kelas 1 Ulya, menentukan tahun kabisat dari berbagai sistem kalender, berikut penjelasannya." />
-    <meta property="og:image" content="https://github.com/taufiq1199/falak/blob/main/sata.jpg?raw=true" />
-    <meta property="og:url" content="https://example.com/" /> <!-- Ganti dengan URL asli jika tersedia -->
-    <meta property="og:type" content="website" />
-
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Perhitungan Tahun Kabisat" />
-    <meta name="twitter:description" content="Cek kabisat: Gregorian, Hijriyah, Ibrani, Tionghoa, Rumi, Qibti, Jawa." />
-    <meta name="twitter:image" content="https://github.com/taufiq1199/falak/blob/main/sata.jpg?raw=true" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Taufiq</title>
     <style>
-        .calendar-card {
+        /* Reset dan Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
             transition: all 0.3s ease;
         }
-        .calendar-card:hover {
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        /* Menu Button */
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu h4 {
+            padding: 0.8rem 1.5rem;
+            color: #6e8efb;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li a {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu li a:hover {
+            background-color: #f0f4ff;
+            color: #6e8efb;
+            padding-left: 1.8rem;
+        }
+
+        .sidebar-menu li {
+            position: relative;
+        }
+        .sidebar-menu li a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        .upload-btn {
+            position: absolute;
+            right: 15px;
+            color: #6e8efb;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .sidebar-menu li:hover .upload-btn {
+            opacity: 1;
+        }
+        .upload-btn:hover {
+            color: #5a7af0;
+            transform: scale(1.1);
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .main.active {
+            margin-left: 300px;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://source.unsplash.com/random/1200x600/?science');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #6e8efb;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #5a7af0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
-        .result-box {
-            min-height: 120px;
+
+        .card-img {
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .card:hover .card-img img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .card-content p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #f0f4ff;
+            color: #6e8efb;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .modal-title {
+            margin-bottom: 1.5rem;
+            color: #6e8efb;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary {
+            background: #ddd;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #ccc;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: #6e8efb;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
             transition: all 0.3s ease;
         }
-        .glow {
-            animation: glow 1.5s ease-in-out infinite alternate;
+
+        .footer-column ul li a:hover {
+            color: #6e8efb;
+            padding-left: 5px;
         }
-                /* Tambahkan warna baru untuk kalender tambahan */
-        .hebrew-card { border-color: #8e44ad; }
-        .hebrew-bg { background-color: #f5eef8; }
-        .chinese-card { border-color: #c0392b; }
-        .chinese-bg { background-color: #fdedec; }
-        .julian-card { border-color: #16a085; }
-        .julian-bg { background-color: #e8f8f5; }
-        .coptic-card { border-color: #f39c12; }
-        .coptic-bg { background-color: #fef5e7; }
-        .javanese-card { border-color: #2c3e50; }
-        .javanese-bg { background-color: #ebedef; }
-        @keyframes glow {
-            from {
-                box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #6e8efb;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        /* Modern Form Styles */
+        .modern-form {
+            margin-top: 1.5rem;
+        }
+        
+        .form-field {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-field input {
+            width: 100%;
+            padding: 0.5rem 0;
+            border: none;
+            border-bottom: 1px solid #bdc3c7;
+            background: transparent;
+            color: white;
+        }
+        
+        .form-field input:focus {
+            outline: none;
+        }
+        
+        .form-field label {
+            position: absolute;
+            top: 0.5rem;
+            left: 0;
+            color: #bdc3c7;
+            transition: all 0.3s;
+        }
+        
+        .form-field input:focus ~ label,
+        .form-field input:valid ~ label {
+            top: -1rem;
+            font-size: 0.8rem;
+            color: #6e8efb;
+        }
+        
+        .underline {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6e8efb;
+            transition: all 0.3s;
+        }
+        
+        .form-field input:focus ~ .underline {
+            width: 100%;
+        }
+        
+        .modern-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid #6e8efb;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modern-btn:hover {
+            background: #6e8efb;
+        }
+        /* New styles for carousel */
+        .carousel-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin: 1.5rem 0;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            gap: 1.5rem;
+            padding: 0.5rem 0;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .carousel-btn:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-btn.prev {
+            left: 10px;
+        }
+
+        .carousel-btn.next {
+            right: 10px;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .carousel-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-indicator.active {
+            background: #6e8efb;
+            transform: scale(1.2);
+        }
+
+        /* Adjust card size in carousel */
+        .carousel .card {
+            min-width: 280px;
+            flex-shrink: 0;
+        }
+
+        /* Section title */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .view-all {
+            color: #6e8efb;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2rem;
             }
-            to {
-                box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+            
+            .main.active {
+                margin-left: 0;
             }
         }
-        /* Custom grid untuk lunar hijri yang lebih lebar */
-        .custom-grid {
-            grid-template-columns: 1fr 2fr 1fr;
-        }
+
         @media (max-width: 768px) {
-            .custom-grid {
+            header {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            main {
+                padding: 1rem;
+                margin-top: 70px;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .sidebar {
+                width: 280px;
+                left: -280px;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            .card-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-footer {
+                flex-direction: column;
+            }
+
+            .modal-footer .btn {
+                width: 100%;
             }
         }
     </style>
+    <!-- Font Awesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-blue-800 mb-2">Tahun Kabisat</h1> 
-            <p class="text-lg text-blue-600 max-w-2xl mx-auto">
-            Cek tahun kabisat pada berbagai sistem kalender dunia dengan referensi <span class="font-semibold text-blue-700">Kitab Badi'atul Mitsal</span>
-            </p>
-        </header>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-atom"></i>
+            <span>Portal Taufiq</span>
+        </div>
+        <button class="menu-btn" id="menuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
 
-        <div
-            class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden mb-12"  <!-- Diubah dari max-w-4xl ke max-w-6xl -->
-        >
-            <div class="p-6">
-<div class="flex flex-col md:flex-row gap-4 mb-6">
-    <!-- Input Tahun -->
-    <div class="flex-1">
-        <label for="yearInput" class="block text-sm font-medium text-gray-700 mb-1">
-            Masukkan Tahun
-        </label>
-        <div class="flex">
-            <input
-                type="number"
-                id="yearInput"
-                class="flex-1 rounded-l-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="misal: 2023"
-            />
-            <button
-                id="checkBtn"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition whitespace-nowrap"
-            >
-                <i class="fas fa-search mr-2"></i>Periksa
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Topik Ilmu</h3>
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-times"></i>
             </button>
         </div>
-    </div>
-
-    <!-- Pilihan Kalender -->
-    <div class="flex-1">
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-            Sistem Kalender
-        </label>
-        <div class="flex flex-wrap gap-2 overflow-x-auto">
-            <button data-calendar="gregorian" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
-                Masehi
-            </button>
-            <button data-calendar="lunar-hijri" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
-                HijriQomr
-            </button>
-            <button data-calendar="solar-hijri" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
-                HijriSyams
-            </button>
-            <button data-calendar="hebrew" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
-                Ibrani
-            </button>
-            <button data-calendar="chinese" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
-                Tionghoa
-            </button>
-            <button data-calendar="julian" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
-                Rumi
-            </button>
-            <button data-calendar="coptic" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
-                Qibti
-            </button>
-            <button data-calendar="javanese" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
-                Jawa
-            </button>
-            <button data-calendar="fushul" class="calendar-tab opacity-50 px-4 py-2 rounded-lg transition whitespace-nowrap hover:bg-gray-300">
-                Fushul
-            </button>
-        </div>
-    </div>
-</div>
-
-
-                <div id="resultContainer" class="hidden">
-                    <!-- Mengubah grid layout menjadi custom-grid -->
-                    <div class="custom-grid grid gap-4">
-                        <!-- Gregorian Card -->
-                        <div
-                            id="gregorian-card"
-                            class="calendar-card bg-white border border-blue-200 rounded-xl p-6 shadow-sm"
-                        >
-                            <div class="flex items-center mb-4">
-                                <div class="bg-blue-100 p-3 rounded-full mr-3">
-                                    <i class="fas fa-calendar-alt text-blue-600 text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-semibold text-blue-800">Gregorian</h3>
-                            </div>
-                            <div
-                                id="gregorian-result"
-                                class="result-box bg-blue-50 rounded-lg p-4 flex flex-col items-center justify-center"
-                            >
-                                <p class="text-gray-500 text-center">
-                                    Masukkan tahun dan klik periksa
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Lunar Hijri Card - Lebih lebar -->
-                        <div
-                            id="lunar-hijri-card"
-                            class="calendar-card bg-white border border-green-200 rounded-xl p-6 shadow-sm"
-                        >
-                            <div class="flex items-center mb-4">
-                                <div class="bg-green-100 p-3 rounded-full mr-3">
-                                    <i class="fas fa-moon text-green-600 text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-semibold text-green-800">Hijriyah (Islam)</h3>
-                            </div>
-                            <div
-                                id="lunar-hijri-result"
-                                class="result-box bg-green-50 rounded-lg p-4 flex flex-col items-center justify-center"
-                            >
-                                <p class="text-gray-500 text-center">
-                                    Masukkan tahun dan klik periksa
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Solar Hijri Card -->
-                        <div
-                            id="solar-hijri-card"
-                            class="calendar-card bg-white border border-orange-200 rounded-xl p-6 shadow-sm"
-                        >
-                            <div class="flex items-center mb-4">
-                                <div class="bg-orange-100 p-3 rounded-full mr-3">
-                                    <i class="fas fa-sun text-orange-600 text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-semibold text-orange-800">Hijriyah (Musiman)</h3>
-                            </div>
-                            <div
-                                id="solar-hijri-result"
-                                class="result-box bg-orange-50 rounded-lg p-4 flex flex-col items-center justify-center"
-                            >
-                                <p class="text-gray-500 text-center">
-                                    Masukkan tahun dan klik periksa
-                                </p>
-                            </div>
-                        </div>
-
-                        <div id="hebrew-card" class="calendar-card bg-white border border-purple-200 rounded-xl p-6 shadow-sm">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-purple-100 p-3 rounded-full mr-3">
-                                    <i class="fas fa-star-of-david text-purple-600 text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-semibold text-purple-800">Ibrani (Yahudi)</h3>
-                            </div>
-                            <div id="hebrew-result" class="result-box bg-purple-50 rounded-lg p-4 flex flex-col items-center justify-center">
-                                <p class="text-gray-500 text-center">Masukkan tahun dan klik periksa</p>
-                            </div>
-                        </div>
-
-                        <!-- Kalender Tionghoa -->
-                        <div id="chinese-card" class="calendar-card bg-white border border-red-200 rounded-xl p-6 shadow-sm">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-red-100 p-3 rounded-full mr-3">
-                                    <i class="fas fa-dragon text-red-600 text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-semibold text-red-800">China (Tionghoa)</h3>
-                            </div>
-                            <div id="chinese-result" class="result-box bg-red-50 rounded-lg p-4 flex flex-col items-center justify-center">
-                                <p class="text-gray-500 text-center">Masukkan tahun dan klik periksa</p>
-                            </div>
-                        </div>
-
-                        <!-- Julian Card -->
-                        <div id="julian-card" class="calendar-card bg-white border border-teal-200 rounded-xl p-6 shadow-sm">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-teal-100 p-3 rounded-full mr-3">
-                                    <i class="fas fa-church text-teal-600 text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-semibold text-teal-800">Rumi (Ottoman)</h3>
-                            </div>
-                            <div id="julian-result" class="result-box bg-teal-50 rounded-lg p-4 flex flex-col items-center justify-center">
-                                <p class="text-gray-500 text-center">Masukkan tahun dan klik periksa</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Coptic Card -->
-                        <div id="coptic-card" class="calendar-card bg-white border border-amber-200 rounded-xl p-6 shadow-sm">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-amber-100 p-3 rounded-full mr-3">
-                                    <i class="fas fa-cross text-amber-600 text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-semibold text-amber-800">Qibti (Koptik)</h3>
-                            </div>
-                            <div id="coptic-result" class="result-box bg-amber-50 rounded-lg p-4 flex flex-col items-center justify-center">
-                                <p class="text-gray-500 text-center">Masukkan tahun dan klik periksa</p>
-                            </div>
-                        </div>
-
-                        <!-- Lunar Jawa Card - Disesuaikan -->
-                        <div
-                            id="javanese-card"
-                            class="calendar-card bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm"
-                        >
-                            <div class="flex items-center mb-4">
-                                <div class="bg-gray-200 p-3 rounded-full mr-3">
-                                    <i class="fas fa-mountain text-gray-700 text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-semibold text-gray-700">Jawa</h3>
-                            </div>
-                            <div
-                                id="lunar-jawa-result"
-                                class="result-box bg-white border border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center"
-                            >
-                                <p class="text-gray-500 text-center">
-                                    Masukkan tahun dan klik periksa
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Fushul Jawiyah Card - Disesuaikan -->
-                        <div
-                            id="fushul-card"
-                            class="calendar-card bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-sm"
-                        >
-                            <div class="flex items-center mb-4">
-                                <div class="bg-yellow-200 p-3 rounded-full mr-3">
-                                    <i class="fas fa-seedling text-yellow-700 text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-semibold text-yellow-800">Fushul Jawiyah</h3>
-                            </div>
-                            <div
-                                id="fushul-result"
-                                class="result-box bg-white border border-dashed border-yellow-300 rounded-lg p-4 flex flex-col items-center justify-center"
-                            >
-                                <p class="text-yellow-600 text-center">Masukkan tahun dan klik periksa</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div
-            class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden"  <!-- Diubah dari max-w-4xl ke max-w-6xl -->
-        >
-<div class="p-6">
-    <h2 class="text-2xl font-bold text-blue-800 mb-4">
-        Tentang Tahun Kabisat
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Gregorian -->
-        <div id="gregorian-info" class="bg-blue-50 p-4 rounded-lg">
-            <h3 class="font-semibold text-blue-700 mb-2 flex items-center">
-                <i class="fas fa-calendar-alt mr-2"></i> Masehi (Gregorian)
-            </h3>
-            <p class="text-gray-700 text-sm">
-                Kalender Masehi (Gregorian) menggunakan aturan berikut: tahun kabisat terjadi setiap 4 tahun. 
-                Namun, jika tahun tersebut habis dibagi 100, maka bukan kabisat — <strong>kecuali</strong> juga habis dibagi 400. 
-                Misalnya, tahun <strong>2000</strong> adalah kabisat (karena habis dibagi 400), 
-                sedangkan <strong>1900</strong> bukan kabisat (karena habis dibagi 100 tapi tidak 400).
-            </p>
-        </div>
-
-        <!-- Lunar Hijri -->
-        <div id="lunar-hijri-info" class="bg-green-50 p-4 rounded-lg">
-            <h3 class="font-semibold text-green-700 mb-2 flex items-center">
-                <i class="fas fa-moon mr-2"></i> Hijriyah (Islam)
-            </h3>
-            <p class="text-gray-700 text-sm">
-                Kalender Hijriyah Qamariyah (lunar hijri) memiliki tahun kabisat sebanyak 11 kali dalam siklus 30 tahun.
-                Tahun kabisat memiliki <strong>355 hari</strong> (dengan menambahkan 1 hari di bulan Dzulhijjah),
-                dibanding tahun basithah yang memiliki <strong>354 hari</strong>.
-                Terdapat dua pendapat utama tentang posisi tahun kabisat:
-            </p>
-            <ul class="text-gray-700 text-sm mt-2 pl-5 list-disc">
-                <li class="mb-1">
-                    <strong>Pendapat Mushannif</strong> (tahun ke-15 sebagai kabisat):
-                    <div class="bg-green-50 p-2 rounded mt-1 text-xs">
-                        Siklus: <strong>2, 5, 7, 10, 13, 15, 18, 21, 24, 26, 29</strong>
-                    </div>
+        <div class="sidebar-menu">
+            <h4>Ilmu Falak</h4>
+            <ul>
+                <li>
+                    <a href="algoritma.html"><i class="fas fa-square-root-alt"></i> Logaritma</a>
+                    <span class="upload-btn" data-discipline="Matematika"><i class="fas fa-upload"></i></span>
                 </li>
                 <li>
-                    <strong>Pendapat Ba'duhum</strong> (tahun ke-16 sebagai kabisat):
-                    <div class="bg-green-50 p-2 rounded mt-1 text-xs">
-                        Siklus: <strong>2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29</strong>
-                    </div>
+                    <a href="kabisat.html"><i class="fas fa-atom"></i> Kabisat</a>
+                    <span class="upload-btn" data-discipline="Fisika"><i class="fas fa-upload"></i></span>
+                </li>
+                <li>
+                    <a href="#"><i class="fas fa-flask"></i> Kimia</a>
+                    <span class="upload-btn" data-discipline="Kimia"><i class="fas fa-upload"></i></span>
+                </li>
+                <li>
+                    <a href="#"><i class="fas fa-dna"></i> Biologi</a>
+                    <span class="upload-btn" data-discipline="Biologi"><i class="fas fa-upload"></i></span>
+                </li>
+                <li>
+                    <a href="#"><i class="fas fa-laptop-code"></i> Ilmu Komputer</a>
+                    <span class="upload-btn" data-discipline="Ilmu Komputer"><i class="fas fa-upload"></i></span>
                 </li>
             </ul>
-            <p class="text-gray-700 text-sm mt-2">
-                Perbedaan hanya pada posisi tahun ke-15 atau 16, sementara posisi lainnya sama.
-                Tahun kabisat menambahkan 1 hari di akhir bulan Dzulhijjah (menjadi 30 hari).
-            </p>
-        </div>
-
-        <!-- Solar Hijri -->
-        <div id="solar-hijri-info" class="bg-orange-50 p-4 rounded-lg">
-            <h3 class="font-semibold text-orange-700 mb-2 flex items-center">
-                <i class="fas fa-sun mr-2"></i> Hijriyah (Musiman)
-            </h3>
-            <p class="text-gray-700 text-sm">
-                Kalender Hijriyah Syamsiyah (solar hijri) adalah sistem kalender musiman Arab tradisional yang membagi tahun menjadi 12 musim 
-                (12 periode dalam 4 musim: gugur, dingin, semi, & panas). Kalender ini memiliki aturan bahwa tahun kabisat adalah tahun 
-                yang habis dibagi 4. Namun, ada pengecualian: <strong>jika juga habis dibagi 128</strong>, maka <u>tidak dianggap kabisat</u>.
-                Sebuah siklus kabisat terjadi setiap 33 tahun dengan pola berikut:
-            </p>
-            <div class="bg-orange-50 border-l-4 border-orange-300 px-3 py-2 my-2 text-sm">
-                <strong>Siklus 33 Tahun:</strong> Tahun kabisat terjadi ketika posisi tahun dalam siklus (tahun % 33) adalah:<br>
-                <strong>1, 5, 9, 13, 17, 22, 26, 30.</strong>
-                Tahun kabisat menambahkan 1 hari di akhir musim panas (menjadi 31 hari).
-            </div>
-            <p class="text-gray-700 text-sm mt-2">
-                <strong>Catatan:</strong> Berlaku di wilayah Jazirah Arab dan sekitarnya, sehingga 
-                tidak berfungsi secara akurat di wilayah subtropis atau beriklim sedang karena perbedaan pola musim.
-            </p>
-        </div>
-
-        <!-- Penjelasan Kalender Baru -->
-        <div id="hebrew-info" class="bg-purple-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-purple-700 mb-2 flex items-center">
-                            <i class="fas fa-star-of-david mr-2"></i> Ibrani (Yahudi)
-                        </h3>
-                        <p class="text-gray-700 text-sm">
-                            Kalender Ibrani menambahkan bulan ke-13 (Adar II) 7 kali dalam siklus 19 tahun.
-                            Tahun kabisat terjadi pada tahun ke: <strong>3, 6, 8, 11, 14, 17, 19</strong>.
-                            Sistem ini menjaga keselarasan antara tahun lunar dan solar.
-                        </p>
-        </div>
-
-        <div id="chinese-info" class="bg-red-50 p-4 rounded-lg">
-                        <h3 class="font-semibold text-red-700 mb-2 flex items-center">
-                            <i class="fas fa-dragon mr-2"></i> China (Tionghoa)
-                        </h3>
-                        <p class="text-gray-700 text-sm">
-                            Kalender Tionghoa menambahkan bulan ke-13 dalam siklus 19 tahun (mirip Ibrani).
-                            Tahun kabisat ditentukan oleh aturan astronomi kompleks yang mempertimbangkan:
-                            <strong>posisi matahari</strong> dan <strong>fase bulan</strong>.
-                        </p>
-        </div>
-
-        <!-- Julian / Rumi -->
-        <div id="julian-info" class="bg-teal-50 p-4 rounded-lg">
-            <h3 class="font-semibold text-teal-700 mb-2 flex items-center">
-                <i class="fas fa-mosque mr-2"></i> Rumi (Ottoman)
-            </h3>
-            <p class="text-gray-700 text-sm">
-                Kalender Rumi adalah versi dari kalender Julian yang digunakan dalam administrasi Kesultanan Utsmaniyah,
-                dengan nama-nama bulan yang diadopsi dari tradisi Suryani (Levant). 
-                Tahun kabisat terjadi setiap 4 tahun tanpa pengecualian, dengan satu hari tambahan yang ditambahkan pada bulan <strong>Syibat</strong> (setara dengan Februari).
-                Saat ini, kalender Julian memiliki selisih sekitar 13 hari dibandingkan kalender Gregorian.
-            </p>
-        </div>
-
-        <!-- Qibti -->
-        <div id="coptic-info" class="bg-amber-50 p-4 rounded-lg">
-            <h3 class="font-semibold text-amber-700 mb-2 flex items-center">
-                <i class="fas fa-cross mr-2"></i> Qibti (Koptik)
-            </h3>
-            <p class="text-gray-700 text-sm">
-                Kalender Qibti adalah sistem penanggalan matahari yang berasal dari Mesir kuno dan diadopsi oleh Gereja Ortodoks Koptik. 
-                Sistem ini terdiri dari 12 bulan masing-masing 30 hari, ditambah 5 atau 6 hari tambahan yang disebut 
-                <strong>Ayyām al-Nasī’</strong> sebagai bulan ke-13. Kalender ini mirip dengan kalender Julian, tetapi tahun pertamanya dimulai pada 284 M.
-                Tahun kabisat terjadi setiap 4 tahun sekali, yaitu ketika tahun Qibti habis dibagi 4.
-            </p>
-        </div>
-
-        <!-- Jawa -->
-        <div id="javanese-info" class="bg-gray-50 p-4 rounded-lg">
-            <h3 class="font-semibold text-gray-700 mb-2 flex items-center">
-                <i class="fas fa-mountain mr-2"></i> Jawa
-            </h3>
-            <p class="text-gray-700 text-sm">
-                Kalender Jawa adalah sistem penanggalan bulan (lunar) yang disusun oleh Sultan Agung Mataram pada abad ke-17, 
-                dengan menggabungkan struktur kalender Hijriyah dan unsur budaya lokal Jawa. 
-                Bulan-bulannya mengikuti perhitungan lunar seperti Hijriyah, namun menggunakan nama-nama khas seperti Sura, Sapar, Mulud, dan seterusnya. 
-                Kalender ini juga memiliki sistem pekan ganda: tujuh hari umum dan lima hari pasaran (Legi, Pahing, Pon, Wage, Kliwon).
-            </p>
-        </div>
-        
-        <!-- Fushul Jawiyah (Pranata Mangsa) -->
-        <div id="fushul-info" class="bg-yellow-50 p-4 rounded-lg">
-            <h3 class="font-semibold text-yellow-700 mb-2 flex items-center">
-                <i class="fas fa-seedling mr-2"></i> Fushul Jawiyah
-            </h3>
-            <p class="text-gray-700 text-sm">
-                Kalender Fushul Jawiyah, atau dikenal sebagai Pranata Mangsa, adalah sistem penanggalan musim tradisional Jawa
-                yang terdiri dari 12 mangsa (musim) dengan jumlah hari bervariasi, dimulai dari <strong>Kasa</strong> hingga <strong>Sadha</strong>.
-                Jumlah hari dalam satu tahun adalah 365 hari (basithah), namun setiap empat tahun sekali ditambahkan 1 hari ekstra pada bulan <strong>Sadha</strong>,
-                sehingga menjadi tahun kabisat (366 hari). Kalender ini digunakan dalam pertanian, perikanan, dan kebudayaan agraris masyarakat Jawa.
-            </p>
-        </div>
-
-    </div>
-</div>
-
+            
+            <h4>Ilmu Sosial</h4>
+            <ul>
+                <li><a href="#"><i class="fas fa-landmark"></i> Ekonomi</a></li>
+                <li><a href="#"><i class="fas fa-gavel"></i> Hukum</a></li>
+                <li><a href="#"><i class="fas fa-users"></i> Sosiologi</a></li>
+                <li><a href="#"><i class="fas fa-brain"></i> Psikologi</a></li>
+                <li><a href="#"><i class="fas fa-globe-asia"></i> Geografi</a></li>
+            </ul>
+            
+            <h4>Ilmu Humaniora</h4>
+            <ul>
+                <li><a href="#"><i class="fas fa-book"></i> Sastra</a></li>
+                <li><a href="#"><i class="fas fa-history"></i> Sejarah</a></li>
+                <li><a href="#"><i class="fas fa-paint-brush"></i> Seni</a></li>
+                <li><a href="#"><i class="fas fa-language"></i> Linguistik</a></li>
+                <li><a href="#"><i class="fas fa-monument"></i> Arkeologi</a></li>
+            </ul>
         </div>
     </div>
 
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const yearInput = document.getElementById("yearInput");
-    const checkBtn = document.getElementById("checkBtn");
-    const resultContainer = document.getElementById("resultContainer");
-    const calendarTabs = document.querySelectorAll(".calendar-tab");
-    const allCards = document.querySelectorAll(".calendar-card");
-    const calendarList = [
-        "gregorian", "lunar-hijri", "solar-hijri", "hebrew",
-        "chinese", "julian", "coptic", "javanese", "fushul"
-    ];
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
 
-    let currentCalendar = "";
-    let hasChecked = false;
+    <!-- Main Content -->
+    <main id="main">
+        <section class="hero">
+            <h1>Jelajahi Dunia Ilmu Pengetahuan</h1>
+            <p>Temukan berbagai disiplin ilmu dari yang paling dasar hingga terapan, semua dalam satu platform yang mudah diakses.</p>
+            <a href="#" class="btn" id="startLearningBtn">Mulai Belajar</a>
+        </section>
 
-    // Set tahun sekarang sebagai default
-    yearInput.value = new Date().getFullYear();
+        <!-- HTML Articles Carousel -->
+        <div class="section-title">
+            <h2>  Unggulan</h2>
+            <a href="#" class="view-all" id="viewAllHtml">Lihat Semua</a>
+        </div>
+        <div class="carousel-container">
+            <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel" id="htmlCarousel"></div>
+            <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+            <div class="carousel-indicators" id="carouselIndicators"></div>
+        </div>
 
-    // Event: Klik tab kalender
-    calendarTabs.forEach(tab => {
-        tab.addEventListener("click", function () {
-            const calendar = this.dataset.calendar;
-            const isActive = this.classList.contains("active");
+        <!-- Regular Articles Grid -->
+        <div class="section-title">
+            <h2>  Terbaru</h2>
+            <a href="#" class="view-all" id="viewAllArticles">Lihat Semua</a>
+        </div>
+        <div class="card-grid" id="articleGrid"></div>
+    </main>
+        <script>
+        // Initialize local storage if empty
+        if (!localStorage.getItem('articles')) {
+            localStorage.setItem('articles', JSON.stringify([]));
+        }
 
-            // Reset gaya semua tab
-            calendarTabs.forEach(t => {
-                t.classList.remove("active", "bg-blue-600", "text-white", "opacity-100");
-                t.classList.add("opacity-50", "bg-gray-200", "hover:bg-gray-300");
+        // Auto-detect HTML articles from sidebar menu
+        function detectHtmlArticles() {
+            const htmlArticles = [];
+            const menuItems = document.querySelectorAll('.sidebar-menu li a');
+            
+            menuItems.forEach(item => {
+                const href = item.getAttribute('href');
+                if (href && href.endsWith('.html')) {
+                    const title = item.textContent.trim();
+                    const discipline = item.parentElement.querySelector('.upload-btn')?.getAttribute('data-discipline') || 'Umum';
+                    
+                    htmlArticles.push({
+                        id: href.replace('.html', ''),
+                        title: title,
+                        discipline: discipline,
+                        description: `  tentang ${title} dalam bidang ${discipline}`,
+                        htmlFile: href,
+                        image: `https://source.unsplash.com/random/400x300/?${discipline.toLowerCase().replace(' ', ',')}`
+                    });
+                }
             });
+            
+            return htmlArticles;
+        }
 
-            if (isActive) {
-                currentCalendar = "";
+        // Carousel functionality
+        function setupCarousel() {
+            const carousel = document.getElementById('htmlCarousel');
+            const prevBtn = document.querySelector('.carousel-btn.prev');
+            const nextBtn = document.querySelector('.carousel-btn.next');
+            const indicators = document.getElementById('carouselIndicators');
+            
+            const htmlArticles = detectHtmlArticles();
+            let currentIndex = 0;
+            let cardsPerView = Math.min(4, Math.floor(window.innerWidth / 300));
+            
+            // Create carousel cards
+            htmlArticles.forEach(article => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => {
+                    const userGmail = localStorage.getItem('user_gmail');
+                    if (userGmail && validateGmail(userGmail)) {
+                        window.location.href = article.htmlFile;
+                    } else {
+                        openGmailModal(article.htmlFile);
+                    }
+                };
+                
+                card.innerHTML = `
+                    <div class="card-img">
+                        <img src="${article.image}" alt="${article.title}">
+                    </div>
+                    <div class="card-content">
+                        <h3>${article.title}</h3>
+                        <p>${article.description}</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="tag">${article.discipline}</span>
+                        <span><i class="fas fa-external-link-alt"></i></span>
+                    </div>
+                `;
+                carousel.appendChild(card);
+            });
+            
+            // Create indicators
+            for (let i = 0; i < htmlArticles.length; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = 'carousel-indicator';
+                if (i === 0) indicator.classList.add('active');
+                indicator.addEventListener('click', () => {
+                    currentIndex = i;
+                    updateCarousel();
+                });
+                indicators.appendChild(indicator);
+            }
+            
+            // Update carousel position
+            function updateCarousel() {
+                const cardWidth = document.querySelector('.carousel .card').offsetWidth + 24; // 24 is gap
+                carousel.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+                
+                // Update active indicator
+                document.querySelectorAll('.carousel-indicator').forEach((ind, index) => {
+                    ind.classList.toggle('active', index === currentIndex);
+                });
+            }
+            
+            // Navigation buttons
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateCarousel();
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < htmlArticles.length - cardsPerView) {
+                    currentIndex++;
+                    updateCarousel();
+                }
+            });
+            
+            // Responsive adjustments
+            window.addEventListener('resize', () => {
+                cardsPerView = Math.min(4, Math.floor(window.innerWidth / 300));
+                updateCarousel();
+            });
+        }
+
+        // Render regular articles
+        function renderArticles() {
+            const articleGrid = document.getElementById('articleGrid');
+            const storedArticles = JSON.parse(localStorage.getItem('articles'));
+            const sortedArticles = [...storedArticles].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+            
+            sortedArticles.slice(0, 6).forEach(article => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => viewArticle(article.id);
+                card.innerHTML = `
+                    <div class="card-img">
+                        <img src="https://source.unsplash.com/random/400x300/?${article.discipline.toLowerCase()}" alt="${article.title}">
+                    </div>
+                    <div class="card-content">
+                        <h3>${article.title}</h3>
+                        <p>${article.content.substring(0, 100)}...</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="tag">${article.discipline}</span>
+                        <span><i class="fas fa-eye"></i> ${article.views || 0}</span>
+                    </div>
+                `;
+                articleGrid.appendChild(card);
+            });
+        }
+
+        // View all buttons
+        document.getElementById('viewAllHtml').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Menampilkan semua   HTML');
+            // You can implement a page showing all HTML articles here
+        });
+
+        document.getElementById('viewAllArticles').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Menampilkan semua  ');
+            // You can implement a page showing all articles here
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            setupCarousel();
+            renderArticles();
+            
+            // Rest of your initialization code...
+        });
+
+        // Rest of your JavaScript remains the same...
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Tentang Kami</h3>
+                <p>Portal Ilmu adalah platform edukasi yang menyediakan akses ke berbagai disiplin ilmu pengetahuan untuk semua kalangan.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Kategori</h3>
+                <ul>
+                    <li><a href="#">Ilmu Eksakta</a></li>
+                    <li><a href="#">Ilmu Sosial</a></li>
+                    <li><a href="#">Ilmu Humaniora</a></li>
+                    <li><a href="#">Teknologi</a></li>
+                    <li><a href="#">Kesehatan</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Link Cepat</h3>
+                <ul>
+                    <li><a href="#">Beranda</a></li>
+                    <li><a href="#"> </a></li>
+                    <li><a href="#">Galeri</a></li>
+                    <li><a href="#">Kontak</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Stay Updated</h3>
+                <p>Bergabung dengan komunitas akademik kami</p>
+                <form class="modern-form" id="subscribeForm">
+                    <div class="form-field">
+                        <input type="email" id="subscribeEmail" required>
+                        <label>Email address</label>
+                        <span class="underline"></span>
+                    </div>
+                    <button type="submit" class="modern-btn">
+                        Subscribe <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 Portal Ilmu Pengetahuan. Semua hak dilindungi.
+        </div>
+    </footer>
+
+    <!-- Gmail Modal -->
+    <div class="modal" id="gmailModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeGmailModal">&times;</span>
+            <h3 class="modal-title">Masukkan Gmail Anda</h3>
+            <p style="margin-bottom: 1.5rem;">Untuk melanjutkan, silakan isi alamat Gmail terlebih dahulu.</p>
+            <div class="form-group">
+                <label for="gmailInput">Alamat Gmail</label>
+                <input type="email" id="gmailInput" placeholder="nama@gmail.com" required>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelGmailBtn">Batal</button>
+                <button class="btn" id="submitGmailBtn">Lanjut</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeUploadModal">&times;</span>
+            <h3 class="modal-title">Upload Tulisan</h3>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="uploadTitle">Judul</label>
+                    <input type="text" id="uploadTitle" placeholder="Judul tulisan" required>
+                </div>
+                <div class="form-group">
+                    <label for="uploadAuthor">Penulis</label>
+                    <input type="text" id="uploadAuthor" placeholder="Nama penulis" required>
+                </div>
+                <div class="form-group">
+                    <label for="uploadDiscipline">Disiplin Ilmu</label>
+                    <select id="uploadDiscipline" required>
+                        <option value="">Pilih disiplin ilmu</option>
+                        <option value="Matematika">Matematika</option>
+                        <option value="Fisika">Fisika</option>
+                        <option value="Kimia">Kimia</option>
+                        <option value="Biologi">Biologi</option>
+                        <option value="Ilmu Komputer">Ilmu Komputer</option>
+                        <option value="Ekonomi">Ekonomi</option>
+                        <option value="Hukum">Hukum</option>
+                        <option value="Sosiologi">Sosiologi</option>
+                        <option value="Psikologi">Psikologi</option>
+                        <option value="Geografi">Geografi</option>
+                        <option value="Sastra">Sastra</option>
+                        <option value="Sejarah">Sejarah</option>
+                        <option value="Seni">Seni</option>
+                        <option value="Linguistik">Linguistik</option>
+                        <option value="Arkeologi">Arkeologi</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="uploadContent">Isi Tulisan</label>
+                    <textarea id="uploadContent" placeholder="Tulis isi   di sini..." required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelUploadBtn">Batal</button>
+                    <button type="submit" class="btn">Kirim</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Article View Modal -->
+    <div class="modal" id="articleModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="modal-close" id="closeArticleModal">&times;</span>
+            <h3 class="modal-title" id="articleModalTitle">Judul  </h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <span id="articleAuthor" style="color: #6e8efb; font-weight: 600;"></span>
+                <span id="articleDiscipline" class="tag"></span>
+            </div>
+            <div id="articleContent" style="line-height: 1.8; text-align: justify;">
+                Isi   akan muncul di sini...
+            </div>
+            <div style="margin-top: 2rem; text-align: right;">
+                <span id="articleViews" style="color: #777; font-size: 0.9rem;">
+                    <i class="fas fa-eye"></i> 0 views
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize local storage if empty
+        if (!localStorage.getItem('articles')) {
+            const defaultArticles = [
+                {
+                    id: 'logaritma',
+                    title: 'Logaritma',
+                    author: 'Admin Portal',
+                    discipline: 'Matematika',
+                    content: 'Logaritma adalah operasi matematika yang merupakan kebalikan (atau invers) dari eksponen atau pemangkatan. Logaritma digunakan untuk menentukan besar pangkat dari suatu bilangan pokok. Secara umum, logaritma ditulis sebagai a^c = b ⇔ ^a log b = c dengan a > 0, a ≠ 1, dan b > 0. Contoh: 10³ = 1000 maka log₁₀ 1000 = 3. Logaritma memiliki banyak aplikasi dalam sains, teknik, dan bidang lainnya yang berhubungan dengan skala besar.',
+                    views: 0
+                },
+                {
+                    id: 'neurosains',
+                    title: 'Neurosains Kognitif',
+                    author: 'Admin Portal',
+                    discipline: 'Biologi',
+                    content: 'Neurosains kognitif adalah bidang ilmiah yang mempelajari proses biologis yang mendasari kognisi, dengan fokus khusus pada hubungan saraf dalam otak yang terlibat dalam proses mental. Ini menggabungkan teori dan metode dari berbagai disiplin ilmu termasuk psikologi, ilmu saraf, linguistik, filsafat pikiran, ilmu komputer, dan antropologi. Neurosains kognitif berusaha memahami bagaimana fungsi psikologis diproduksi oleh sirkuit otak. Bidang ini telah membuat kemajuan signifikan dalam memahami mekanisme otak yang mendasari persepsi, memori, perhatian, bahasa, pengambilan keputusan, dan kesadaran.',
+                    views: 0
+                },
+                {
+                    id: 'machine-learning',
+                    title: 'Machine Learning',
+                    author: 'Admin Portal',
+                    discipline: 'Ilmu Komputer',
+                    content: 'Machine learning adalah cabang dari kecerdasan buatan (AI) yang berfokus pada pembangunan sistem yang dapat belajar dari data, mengidentifikasi pola, dan membuat keputusan dengan intervensi manusia yang minimal. Algoritma machine learning membangun model matematika berdasarkan data sampel (disebut "data pelatihan") untuk membuat prediksi atau keputusan tanpa diprogram secara eksplisit untuk melakukan tugas tersebut. Machine learning digunakan dalam berbagai aplikasi seperti pengenalan suara, rekomendasi produk, diagnosis medis, analisis pasar saham, dan kendaraan otonom. Ada tiga jenis utama machine learning: supervised learning, unsupervised learning, dan reinforcement learning.',
+                    views: 0
+                }
+            ];
+            localStorage.setItem('articles', JSON.stringify(defaultArticles));
+        }
+
+        // Sidebar Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const main = document.getElementById('main');
+
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            main.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            main.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            main.classList.remove('active');
+        });
+
+        // Gmail Modal
+        const gmailModal = document.getElementById('gmailModal');
+        const closeGmailModal = document.getElementById('closeGmailModal');
+        const cancelGmailBtn = document.getElementById('cancelGmailBtn');
+        const submitGmailBtn = document.getElementById('submitGmailBtn');
+        const gmailInput = document.getElementById('gmailInput');
+        const startLearningBtn = document.getElementById('startLearningBtn');
+
+        let targetLink = null;
+
+        function openGmailModal(link) {
+            targetLink = link;
+            gmailModal.classList.add('active');
+        }
+
+        function closeGmailModalFunc() {
+            gmailModal.classList.remove('active');
+            targetLink = null;
+        }
+
+        closeGmailModal.addEventListener('click', closeGmailModalFunc);
+        cancelGmailBtn.addEventListener('click', closeGmailModalFunc);
+
+        submitGmailBtn.addEventListener('click', () => {
+            const email = gmailInput.value.trim();
+            if (validateGmail(email)) {
+                localStorage.setItem('user_gmail', email);
+                if (targetLink) {
+                    window.location.href = targetLink;
+                }
+                closeGmailModalFunc();
             } else {
-                currentCalendar = calendar;
-                this.classList.remove("bg-gray-200", "hover:bg-gray-300", "opacity-50");
-                this.classList.add("active", "bg-blue-600", "text-white", "opacity-100");
-            }
-
-            if (hasChecked) {
-                showSelectedCard();
-                toggleInfoCards();
+                alert('Harap masukkan alamat Gmail yang valid (contoh: nama@gmail.com)');
             }
         });
-    });
 
-    // Event: Klik tombol "Periksa"
-    checkBtn.addEventListener("click", function () {
-        const year = parseInt(yearInput.value.trim());
-        if (isNaN(year) || year <= 0) {
-            alert("Masukkan tahun yang valid.");
-            return;
+        function validateGmail(email) {
+            return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
         }
 
-        hasChecked = true;
-        resultContainer.classList.remove("hidden");
-
-        runLeapYearChecks(year);
-        showSelectedCard();
-        toggleInfoCards();
-    });
-
-    // Jalankan semua pemeriksaan tahun kabisat
-    function runLeapYearChecks(year) {
-        checkGregorianLeapYear(year);
-        checkLunarHijriLeapYear(year);
-        checkHebrewLeapYear(year);
-        checkChineseLeapYear(year);
-        checkJulianLeapYear(year);
-        checkCopticLeapYear(year);
-        checkSolarHijriLeapYear(year);
-        checkLunarJawaLeapYear(year);
-        checkFushulLeapYear(year);
-    }
-
-    // Tampilkan hanya kartu yang sesuai
-    function showSelectedCard() {
-        allCards.forEach(card => {
-            card.classList.add("hidden");
-            card.className = card.className.replace(/border-\w+-400/g, '');
-            card.classList.remove("glow");
+        // Capture all links that require Gmail
+        document.querySelectorAll('.sidebar-menu a, .card-footer a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                openGmailModal(this.getAttribute('href'));
+            });
         });
 
-        if (!currentCalendar) {
-            allCards.forEach(card => card.classList.remove("hidden"));
-            return;
+        startLearningBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openGmailModal('#');
+        });
+
+        // Upload Modal
+        const uploadModal = document.getElementById('uploadModal');
+        const closeUploadModal = document.getElementById('closeUploadModal');
+        const cancelUploadBtn = document.getElementById('cancelUploadBtn');
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadDiscipline = document.getElementById('uploadDiscipline');
+
+        function openUploadModal(discipline) {
+            if (discipline) {
+                uploadDiscipline.value = discipline;
+            }
+            uploadModal.classList.add('active');
         }
 
-        const selected = document.getElementById(`${currentCalendar}-card`);
-        if (selected) {
-            selected.classList.remove("hidden");
-            selected.classList.add("glow");
+        function closeUploadModalFunc() {
+            uploadModal.classList.remove('active');
+            uploadForm.reset();
+        }
 
-            const borderColors = {
-                "gregorian": "border-blue-400",
-                "lunar-hijri": "border-green-400",
-                "solar-hijri": "border-blue-400",
-                "hebrew": "border-purple-400",
-                "chinese": "border-red-400",
-                "julian": "border-teal-400",
-                "coptic": "border-amber-400",
-                "javanese": "border-gray-400",
-                "fushul": "border-gray-400"
+        closeUploadModal.addEventListener('click', closeUploadModalFunc);
+        cancelUploadBtn.addEventListener('click', closeUploadModalFunc);
+
+        // Upload button click handlers
+        document.querySelectorAll('.upload-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const discipline = this.getAttribute('data-discipline');
+                openUploadModal(discipline);
+            });
+        });
+
+        // Handle form submission
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('uploadTitle').value.trim();
+            const author = document.getElementById('uploadAuthor').value.trim();
+            const discipline = document.getElementById('uploadDiscipline').value;
+            const content = document.getElementById('uploadContent').value.trim();
+            
+            if (!title || !author || !discipline || !content) {
+                alert('Semua kolom harus diisi!');
+                return;
+            }
+            
+            const articleId = 'article-' + Date.now();
+            const newArticle = {
+                id: articleId,
+                title,
+                author,
+                discipline,
+                content,
+                views: 0
             };
+            
+            // Save to local storage
+            const articles = JSON.parse(localStorage.getItem('articles'));
+            articles.push(newArticle);
+            localStorage.setItem('articles', JSON.stringify(articles));
+            
+            // Refresh the card grid
+            renderArticles();
+            
+            // Close modal and reset form
+            closeUploadModalFunc();
+            
+            // Show success message
+            alert('  berhasil diunggah!');
+        });
 
-            selected.classList.add(borderColors[currentCalendar] || "border-gray-400");
+        // Article Modal
+        const articleModal = document.getElementById('articleModal');
+        const closeArticleModal = document.getElementById('closeArticleModal');
+        const articleModalTitle = document.getElementById('articleModalTitle');
+        const articleAuthor = document.getElementById('articleAuthor');
+        const articleDiscipline = document.getElementById('articleDiscipline');
+        const articleContent = document.getElementById('articleContent');
+        const articleViews = document.getElementById('articleViews');
+
+        function viewArticle(articleId) {
+            const articles = JSON.parse(localStorage.getItem('articles'));
+            const article = articles.find(a => a.id === articleId);
+            
+            if (article) {
+                // Update view count
+                article.views++;
+                localStorage.setItem('articles', JSON.stringify(articles));
+                
+                // Populate modal
+                articleModalTitle.textContent = article.title;
+                articleAuthor.textContent = 'Oleh: ' + article.author;
+                articleDiscipline.textContent = article.discipline;
+                articleContent.innerHTML = article.content.replace(/\n/g, '<br>');
+                articleViews.innerHTML = `<i class="fas fa-eye"></i> ${article.views} views`;
+                
+                // Show modal
+                articleModal.classList.add('active');
+                
+                // Re-render articles to update view counts
+                renderArticles();
+            }
         }
-    }
 
-    // Tampilkan info-card penjelasan sesuai tab atau semua
-    function toggleInfoCards() {
-        calendarList.forEach(id => {
-            const el = document.getElementById(`${id}-info`);
-            if (el) {
-                if (!currentCalendar || currentCalendar === id) {
-                    el.classList.remove("hidden");
-                } else {
-                    el.classList.add("hidden");
-                }
+        closeArticleModal.addEventListener('click', () => {
+            articleModal.classList.remove('active');
+        });
+
+        // Subscribe Form
+        const subscribeForm = document.getElementById('subscribeForm');
+        subscribeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('subscribeEmail').value.trim();
+            if (email) {
+                alert('Terima kasih telah berlangganan! Kami akan mengirimkan pembaruan ke ' + email);
+                subscribeForm.reset();
             }
         });
-    }
 
-            // Cek tahun kabisat Gregorian (Masehi)
-            function checkGregorianLeapYear(year) {
-                const isLeap =
-                    (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-                const resultDiv = document.getElementById("gregorian-result");
-
-                resultDiv.innerHTML = `
-                    <div class="text-center">
-                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
-                        <div class="text-4xl mb-2 ${
-                            isLeap ? "text-blue-600" : "text-gray-500"
-                        }">
-                            ${
-                                isLeap
-                                    ? '<i class="fas fa-check-circle"></i>'
-                                    : '<i class="fas fa-times-circle"></i>'
-                            }
-                        </div>
-                        <p class="${
-                            isLeap ? "text-blue-600 font-medium" : "text-gray-600"
-                        }">
-                            ${
-                                isLeap
-                                    ? "Ini adalah tahun kabisat"
-                                    : "Ini adalah tahun basithah"
-                            }
-                        </p>
-                        ${
-                            !isLeap
-                                ? `<p class="text-sm text-gray-500 mt-2">Tahun kabisat berikutnya: ${findNextGregorianLeapYear(
-                                      year
-                                  )}</p>`
-                                : ""
-                        }
-                    </div>
-                `;
-            }
-
-            // Cek tahun kabisat Lunar Hijri (Qomariyah)
-            function checkLunarHijriLeapYear(year) {
-                // Pendapat kitab Badiatul Mistsal (tahun kabisat ke 15)
-                const leapYearsBadiatul = [2, 5, 7, 10, 13, 15, 18, 21, 24, 26, 29];
-                // Pendapat Ba'duhum (tahun kabisat ke 16)
-                const leapYearsBaDuhum = [2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29];
+        // Render articles function
+        function renderArticles() {
+            const cardGrid = document.getElementById('cardGrid');
+            if (!cardGrid) return;
+            
+            const articles = JSON.parse(localStorage.getItem('articles'));
+            const sortedArticles = [...articles].sort((a, b) => b.views - a.views);
+            
+            // Clear existing cards except the first three default ones
+            const defaultCards = Array.from(cardGrid.children).slice(0, 3);
+            cardGrid.innerHTML = '';
+            defaultCards.forEach(card => cardGrid.appendChild(card));
+            
+            // Add user-submitted articles
+            sortedArticles.forEach(article => {
+                // Skip default articles that are already shown
+                if (['logaritma', 'neurosains', 'machine-learning'].includes(article.id)) return;
                 
-                const positionInCycle = year % 30 || 30; // Posisi dalam siklus 30 tahun (1-30)
-                
-                const isLeapBadiatul = leapYearsBadiatul.includes(positionInCycle);
-                const isLeapBaDuhum = leapYearsBaDuhum.includes(positionInCycle);
-
-                const resultDiv = document.getElementById("lunar-hijri-result");
-
-                resultDiv.innerHTML = `
-                    <div class="text-center">
-                        <p class="text-lg font-semibold mb-2">Tahun ${year}</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="p-4 rounded-lg border ${isLeapBadiatul ? 'border-green-600 bg-green-50' : 'border-gray-300 bg-gray-100'}">
-                                <h4 class="font-semibold mb-1 text-green-700">Pendapat Mushannif</h4>
-                                <div class="text-3xl mb-2 ${isLeapBadiatul ? 'text-green-600' : 'text-gray-500'}">
-                                    ${isLeapBadiatul ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
-                                </div>
-                                <p class="${isLeapBadiatul ? 'text-green-600 font-medium' : 'text-gray-600'}">
-                                    ${isLeapBadiatul ? "Ini adalah tahun kabisat (355 hari)" : "Ini adalah tahun basithah (354 hari)"}
-                                </p>
-                                <p class="text-sm text-gray-500 mt-1">Posisi dalam siklus 30 tahun: ${positionInCycle}</p>
-                            </div>
-                            <div class="p-4 rounded-lg border ${isLeapBaDuhum ? 'border-green-600 bg-green-50' : 'border-gray-300 bg-gray-100'}">
-                                <h4 class="font-semibold mb-1 text-green-700">Pendapat Ba'duhum</h4>
-                                <div class="text-3xl mb-2 ${isLeapBaDuhum ? 'text-green-600' : 'text-gray-500'}">
-                                    ${isLeapBaDuhum ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
-                                </div>
-                                <p class="${isLeapBaDuhum ? 'text-green-600 font-medium' : 'text-gray-600'}">
-                                    ${isLeapBaDuhum ? "Ini adalah tahun kabisat (355 hari)" : "Ini adalah tahun basithah (354 hari)"}
-                                </p>
-                                <p class="text-sm text-gray-500 mt-1">Posisi dalam siklus 30 tahun: ${positionInCycle}</p>
-                            </div>
-                        </div>
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => viewArticle(article.id);
+                card.innerHTML = `
+                    <div class="card-img">
+                        <img src="https://source.unsplash.com/random/400x300/?${article.discipline.toLowerCase()}" alt="${article.title}">
+                    </div>
+                    <div class="card-content">
+                        <h3>${article.title}</h3>
+                        <p>${article.content.substring(0, 100)}...</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="tag">${article.discipline}</span>
+                        <span><i class="fas fa-eye"></i> ${article.views}</span>
                     </div>
                 `;
-            }
-
-            // Cek tahun kabisat Solar Hijri (Syamsiyah)
-            function checkSolarHijriLeapYear(year) {
-                // Tahun kabisat Solar Hijri mengikuti siklus 33 tahun dengan 8 tahun kabisat
-                // Tahun kabisat adalah tahun yang memiliki sisa pembagian 1, 5, 9, 13, 17, 22, 26, atau 30 saat dibagi 33
-                const remainder = year % 33;
-                const isLeap = [1, 5, 9, 13, 17, 22, 26, 30].includes(remainder);
-
-                const resultDiv = document.getElementById("solar-hijri-result");
-
-                resultDiv.innerHTML = `
-                    <div class="text-center">
-                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
-                        <div class="text-4xl mb-2 ${
-                            isLeap ? "text-orange-600" : "text-gray-500"
-                        }">
-                            ${
-                                isLeap
-                                    ? '<i class="fas fa-check-circle"></i>'
-                                    : '<i class="fas fa-times-circle"></i>'
-                            }
-                        </div>
-                        <p class="${
-                            isLeap ? "text-orange-600 font-medium" : "text-gray-600"
-                        }">
-                            ${
-                                isLeap
-                                    ? "Ini adalah tahun kabisat (366 hari)"
-                                    : "Ini adalah tahun basithah (365 hari)"
-                            }
-                        </p>
-                        <p class="text-sm text-gray-500 mt-2">Posisi dalam siklus 33 tahun: ${remainder}</p>
-                    </div>
-                `;
-            }
-
-            // Fungsi baru untuk kalender tambahan
-            function checkHebrewLeapYear(year) {
-                // Siklus Metonik: tahun kabisat pada posisi 3,6,8,11,14,17,19
-                const isLeap = [3,6,8,11,14,17,19].includes(year % 19 || 19);
-                document.getElementById("hebrew-result").innerHTML = `
-                    <div class="text-center">
-                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
-                        <div class="text-4xl mb-2 ${isLeap ? "text-purple-600" : "text-gray-500"}">
-                            ${isLeap ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
-                        </div>
-                        <p class="${isLeap ? "text-purple-600 font-medium" : "text-gray-600"}">
-                            ${isLeap ? "Ini adalah tahun kabisat (13 bulan)" : "Ini adalah Tahun basithah (12 bulan)"}
-                        </p>
-                    </div>
-                `;
-            }
-
-            function checkChineseLeapYear(year) {
-                // Perhitungan kompleks - disederhanakan dengan siklus 19 tahun
-                const isLeap = [3,6,9,11,14,17,19].includes(year % 19 || 19);
-                document.getElementById("chinese-result").innerHTML = `
-                    <div class="text-center">
-                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
-                        <div class="text-4xl mb-2 ${isLeap ? "text-red-600" : "text-gray-500"}">
-                            ${isLeap ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
-                        </div>
-                        <p class="${isLeap ? "text-red-600 font-medium" : "text-gray-600"}">
-                            ${isLeap ? "Ini adalah tahun kabisat (13 bulan)" : "Ini adalah Tahun basithah (12 bulan)"}
-                        </p>
-                    </div>
-                `;
-            }
-
-            function checkJulianLeapYear(year) {
-                const isLeap = year % 4 === 0;
-                const resultDiv = document.getElementById("julian-result");
-                displayResult(resultDiv, year, isLeap, "teal", "Ini adalah tahun kabisat (366 hari)", "Ini adalah tahun basithah (365 hari)");
-            }
-
-            function checkCopticLeapYear(year) {
-                // Tahun Coptic dimulai 284 M, kabisat ketika (tahun + 1) habis dibagi 4
-                const isLeap = (year + 1) % 4 === 0;
-                const resultDiv = document.getElementById("coptic-result");
-                displayResult(resultDiv, year, isLeap, "amber", "Ini adalah tahun kabisat (366 hari)", "Ini adalah tahun basithah (365 hari)");
-            }
-
-            // Fungsi bantu untuk menampilkan hasil
-            function displayResult(div, year, isLeap, color, trueMsg, falseMsg) {
-                div.innerHTML = `
-                    <div class="text-center">
-                        <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
-                        <div class="text-4xl mb-2 ${isLeap ? `text-${color}-600` : "text-gray-500"}">
-                            ${isLeap ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
-                        </div>
-                        <p class="${isLeap ? `text-${color}-600 font-medium` : "text-gray-600"}">
-                            ${isLeap ? trueMsg : falseMsg}
-                        </p>
-                    </div>
-                `;
-            }
-
-        // Cek tahun kabisat Kalender Hijriyah Lunar versi Kalender Jawa
-        function checkLunarJawaLeapYear(year) {
-            // Pendapat dalam Kitab Badi'atu al-Mitsal (tahun kabisat ke-15)
-            const leapYearsMushannif = [2, 5, 7, 10, 13, 15, 18, 21, 24, 26, 29];
-
-            // Pendapat Ba’duhum (tahun kabisat ke-16)
-            const leapYearsBaduhum = [2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29];
-
-            const positionInCycle = year % 30 || 30; // Posisi dalam siklus 30 tahun
-
-            const isLeapMushannif = leapYearsMushannif.includes(positionInCycle);
-            const isLeapBaduhum = leapYearsBaduhum.includes(positionInCycle);
-
-            const resultDiv = document.getElementById("lunar-jawa-result");
-
-            resultDiv.innerHTML = `
-                <div class="text-center">
-                    <p class="text-lg font-semibold mb-2">Tahun ${year}</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Pendapat Mushannif -->
-                        <div class="p-4 rounded-lg border ${isLeapMushannif ? 'border-green-600 bg-green-50' : 'border-gray-300 bg-gray-100'}">
-                            <h4 class="font-semibold mb-1 text-green-700">Pendapat Mushannif</h4>
-                            <div class="text-3xl mb-2 ${isLeapMushannif ? 'text-green-600' : 'text-gray-500'}">
-                                ${isLeapMushannif ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
-                            </div>
-                            <p class="${isLeapMushannif ? 'text-green-600 font-medium' : 'text-gray-600'}">
-                                ${isLeapMushannif ? "Ini adalah tahun kabisat (355 hari)" : "Ini adalah tahun basithah (354 hari)"}
-                            </p>
-                            <p class="text-sm text-gray-500 mt-1">Posisi dalam siklus 30 tahun: ke-${positionInCycle}</p>
-                        </div>
-
-                        <!-- Pendapat Ba'duhum -->
-                        <div class="p-4 rounded-lg border ${isLeapBaduhum ? 'border-green-600 bg-green-50' : 'border-gray-300 bg-gray-100'}">
-                            <h4 class="font-semibold mb-1 text-green-700">Pendapat Ba’duhum</h4>
-                            <div class="text-3xl mb-2 ${isLeapBaduhum ? 'text-green-600' : 'text-gray-500'}">
-                                ${isLeapBaduhum ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
-                            </div>
-                            <p class="${isLeapBaduhum ? 'text-green-600 font-medium' : 'text-gray-600'}">
-                                ${isLeapBaduhum ? "Ini adalah tahun kabisat (355 hari)" : "Ini adalah tahun basithah (354 hari)"}
-                            </p>
-                            <p class="text-sm text-gray-500 mt-1">Posisi dalam siklus 30 tahun: ke-${positionInCycle}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
+                cardGrid.appendChild(card);
+            });
         }
 
-        // Cek tahun kabisat Fushul Jawiyah (Pranata Mangsa)
-        function checkFushulLeapYear(year) {
-            const isLeap = year % 4 === 0;
-            const resultDiv = document.getElementById("fushul-result");
+        // Initial render
+        renderArticles();
 
-            resultDiv.innerHTML = `
-                <div class="text-center">
-                    <p class="text-lg font-semibold mb-1">Tahun ${year}</p>
-                    <div class="text-4xl mb-2 ${isLeap ? "text-yellow-600" : "text-gray-500"}">
-                        ${
-                            isLeap
-                                ? '<i class="fas fa-check-circle"></i>'
-                                : '<i class="fas fa-times-circle"></i>'
-                        }
-                    </div>
-                    <p class="${isLeap ? "text-yellow-600 font-medium" : "text-gray-600"}">
-                        ${
-                            isLeap
-                                ? "Ini adalah tahun kabisat (Sadha = 42 hari)"
-                                : "Ini adalah tahun basithah (Sadha = 41 hari)"
-                        }
-                    </p>
-                    ${
-                        !isLeap
-                            ? `<p class="text-sm text-gray-500 mt-2">Tahun kabisat berikutnya: ${findNextFushulLeapYear(year)}</p>`
-                            : ""
-                    }
-                </div>
-            `;
-        }
-
-        // Cari tahun kabisat berikutnya (Fushul Jawiyah: tiap 4 tahun)
-        function findNextFushulLeapYear(currentYear) {
-            let next = currentYear + 1;
-            while (next % 4 !== 0) {
-                next++;
+        // Scroll effect for header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.2)';
+            } else {
+                header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
             }
-            return next;
-        }
-
-            // Fungsi bantu untuk mencari tahun kabisat Gregorian berikutnya
-            function findNextGregorianLeapYear(year) {
-                let nextYear = year + 1;
-                while (true) {
-                    if (
-                        (nextYear % 4 === 0 && nextYear % 100 !== 0) ||
-                        nextYear % 400 === 0
-                    ) {
-                        return nextYear;
-                    }
-                    nextYear++;
-                }
-            }
-
-
         });
     </script>
 </body>
