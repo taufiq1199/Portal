@@ -5,6 +5,7 @@
   <title>Kalkulator Trigonometri</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="sata.jpg" type="image/x-icon">
   <style>
     :root {
       --primary: #3b82f6;
@@ -349,7 +350,7 @@
     
     <div class="input-group">
       <label for="nilaiInput">Nilai atau Logaritma</label>
-      <input type="number" step="0.00001" id="nilaiInput" placeholder="Contoh: 0.02618 atau 8.41792">
+      <input type="text" step="0.00001" id="nilaiInput" placeholder="Contoh: 0.02618 atau 8.41792">
     </div>
     
     <button onclick="konversiKeSudut()">
@@ -383,92 +384,6 @@
     </div>
   </div>
 
-  <script>
-    function toLogBrigg(x) {
-      if (x <= 0) return "Tidak terdefinisi";
-      const logVal = Math.log10(x);
-      return logVal < 0 ? (10 + logVal).toFixed(5) : logVal.toFixed(5);
-    }
-
-    function logCotgBrigg(tanVal) {
-      if (tanVal <= 0) return "Tidak terdefinisi";
-      const logTan = Math.log10(tanVal);
-      return (10 - logTan).toFixed(5);
-    }
-
-    function getSudutDesimal() {
-      const d = parseFloat(document.getElementById("derajat").value) || 0;
-      const m = parseFloat(document.getElementById("menit").value) || 0;
-      const s = parseFloat(document.getElementById("detik").value) || 0;
-      return d + (m / 60) + (s / 3600);
-    }
-
-    function hitungLog() {
-      const sudut = getSudutDesimal();
-      const rad = sudut * Math.PI / 180;
-      const sin = Math.sin(rad);
-      const cos = Math.cos(rad);
-      const tan = Math.tan(rad);
-
-      document.getElementById("sudutLog").innerText = sudut.toFixed(6) + "°";
-      document.getElementById("logSin").innerText = toLogBrigg(sin);
-      document.getElementById("logCos").innerText = toLogBrigg(cos);
-      document.getElementById("logTg").innerText = toLogBrigg(Math.abs(tan));
-      document.getElementById("logCotg").innerText = logCotgBrigg(Math.abs(tan));
-
-      document.getElementById("resultLog").style.display = "block";
-      document.getElementById("resultNilai").style.display = "none";
-    }
-
-    function hitungNilai() {
-      const sudut = getSudutDesimal();
-      const rad = sudut * Math.PI / 180;
-      const sin = Math.sin(rad);
-      const cos = Math.cos(rad);
-      const tan = Math.tan(rad);
-      const cotg = tan !== 0 ? 1 / tan : "Tidak terdefinisi";
-
-      document.getElementById("sudutNilai").innerText = sudut.toFixed(6) + "°";
-      document.getElementById("valSin").innerText = sin.toFixed(5);
-      document.getElementById("valCos").innerText = cos.toFixed(5);
-      document.getElementById("valTg").innerText = tan.toFixed(5);
-      document.getElementById("valCotg").innerText = typeof cotg === "string" ? cotg : cotg.toFixed(5);
-
-      document.getElementById("resultNilai").style.display = "block";
-      document.getElementById("resultLog").style.display = "none";
-    }
-
-    function konversiKeSudut() {
-      const jenis = document.getElementById("jenisFungsi").value;
-      let nilai = parseFloat(document.getElementById("nilaiInput").value);
-      if (isNaN(nilai)) {
-        alert("Masukkan nilai yang valid!");
-        return;
-      }
-
-      if (jenis.startsWith("log")) {
-        const mantisa = nilai - 10;
-        nilai = Math.pow(10, mantisa);
-      }
-
-      let rad = 0;
-      if (jenis === "sin" || jenis === "logsin") rad = Math.asin(nilai);
-      else if (jenis === "cos" || jenis === "logcos") rad = Math.acos(nilai);
-      else if (jenis === "tg" || jenis === "logtg") rad = Math.atan(nilai);
-      else if (jenis === "cotg" || jenis === "logcotg") rad = Math.atan(1 / nilai);
-
-      const sudut = rad * 180 / Math.PI;
-      const d = Math.floor(sudut);
-      const mFloat = (sudut - d) * 60;
-      const m = Math.floor(mFloat);
-      const s = ((mFloat - m) * 60).toFixed(2);
-
-      document.getElementById("hasilDerajat").innerText = `${d}°`;
-      document.getElementById("hasilMenit").innerText = `${m}′`;
-      document.getElementById("hasilDetik").innerText = `${s}″`;
-      document.getElementById("resultSudut").style.display = "block";
-    }
-  </script>
-
+<script src="logaritma.js"></script>
 </body>
 </html>

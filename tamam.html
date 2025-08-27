@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Pengurangan Sudut</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="sata.jpg" type="image/x-icon">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .calculator-container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 440px;
+      padding: 30px;
+    }
+    .input-box {
+      width: 80px;
+      height: 80px;
+      text-align: center;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .input-box:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .input-label {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title i {
+      color: #3b82f6;
+      font-size: 20px;
+    }
+    .input-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 3px;
+    }
+    .result-box {
+      width: 80px;
+      height: 80px;
+      text-align: center;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8fafc;
+      color: #059669;
+    }
+    .button-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .button-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.25);
+    }
+    .button-secondary {
+      background: white;
+      color: #64748b;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .button-secondary:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+    }
+    .divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 2px 0;
+    }
+    .animate-result {
+      animation: pulse 0.5s ease;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator-container">
+    <h1 class="text-2xl font-semibold text-blue-600 text-center mb-6 flex items-center justify-center gap-2">
+      <i class="fas fa-calculator"></i> Tamam Darojah
+    </h1>
+
+    <!-- Sudut Awal -->
+    <div class="mb-5">
+      <div class="section-title">
+        <i class="fas fa-angle-up"></i> Sudut Awal
+      </div>
+      <div class="input-group">
+        <div class="input-container">
+          <span class="input-label">Darojah</span>
+          <input type="number" id="degrees1" class="input-box" min="0" max="360" placeholder="90">
+        </div>
+        <div class="input-container">
+          <span class="input-label">Menit</span>
+          <input type="number" id="minutes1" class="input-box" min="0" max="59" placeholder="0">
+        </div>
+      </div>
+    
+      <div class="input-group">
+        <div class="input-container">
+          <span class="input-label">Darojah</span>
+          <input type="number" id="degrees2" class="input-box" min="0" max="360" placeholder="0">
+        </div>
+        <div class="input-container">
+          <span class="input-label">Menit</span>
+          <input type="number" id="minutes2" class="input-box" min="0" max="59" placeholder="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Hasil -->
+    <div>
+      <div class="section-title">
+        <i class="fas fa-angle-right text-blue-500"></i> Hasil Tamam
+      </div>
+      <div id="result" class="input-group">
+        <div class="input-container">
+          <span class="input-label">Darojah</span>
+          <div id="hasilDarojah" class="result-box">0</div>
+        </div>
+        <div class="input-container">
+          <span class="input-label">Menit</span>
+          <div id="hasilMenit" class="result-box">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tombol -->
+    <div class="button-group">
+      <button onclick="calculate()" class="button-primary">
+        <i class="fas fa-calculator"></i> Hitung
+      </button>
+      <button onclick="resetCalc()" class="button-secondary">
+        <i class="fas fa-redo"></i> Reset
+      </button>
+    </div>
+  </div>
+
+<script src="tamam.js"></script>
+</body>
+</html>

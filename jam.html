@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="sata.jpg" type="image/x-icon">
+  <title>Konversi Derajat ke Jam</title>
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-light: #93c5fd;
+      --primary-dark: #1d4ed8;
+      --secondary: #10b981;
+      --secondary-light: #a7f3d0;
+      --bg: #f0f7ff;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius: 16px;
+    }
+    * { 
+      box-sizing: border-box; 
+      transition: all 0.2s ease; 
+    }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 500px;
+      width: 100%;
+    }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      border: 1px solid var(--border);
+    }
+    .title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--primary-dark);
+      text-align: center;
+      position: relative;
+      padding-bottom: 12px;
+    }
+    .title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .input-field {
+      position: relative;
+      flex: 1;
+    }
+    .input-label {
+      display: block;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .input {
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      outline: none;
+      background: #fafafa;
+      transition: all 0.3s ease;
+    }
+    .input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+      background: #fff;
+    }
+    .btn {
+      padding: 16px 24px;
+      border-radius: 12px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(59,130,246,0.2);
+      width: 100%;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      margin-top: 8px;
+    }
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(59,130,246,0.25);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+    .result-container {
+      margin-top: 28px;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(147,197,253,0.12) 100%);
+      border-radius: 12px;
+      border: 1px dashed var(--primary-light);
+      text-align: center;
+    }
+    .result-label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .result-value {
+      font-family: 'Courier New', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      line-height: 1.4;
+    }
+    .formula {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(59,130,246,0.05);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .formula-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+    .deg-symbol, .min-symbol {
+      position: absolute;
+      right: 15px;
+      top: 42px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    @media (max-width: 600px) {
+      .input-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .card {
+        padding: 24px;
+      }
+      .result-value {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="title">Konversi Derajat ke Jam</div>
+      
+      <div class="input-group">
+        <div class="input-field">
+          <label class="input-label">Derajat</label>
+          <input type="number" id="deg" class="input" placeholder="0" value="64">
+          <span class="deg-symbol">°</span>
+        </div>
+        
+        <div class="input-field">
+          <label class="input-label">Menit Busur</label>
+          <input type="number" id="min" class="input" placeholder="0" value="41">
+          <span class="min-symbol">′</span>
+        </div>
+      </div>
+      
+      <button id="convertBtn" class="btn">Konversi ke Waktu</button>
+      
+      <div class="result-container">
+        <div class="result-label">Hasil Konversi</div>
+        <div class="result-value" id="output">-</div>
+      </div>
+      
+      <div class="formula">
+        <div class="formula-title">Rumus Konversi</div>
+        <div>1 jam = 15 derajat | 1 derajat = 4 menit waktu</div>
+      </div>
+    </div>
+  </div>
+
+<script src="jam.js"></script>
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koleksi Kalkulator Astronomi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="sata.jpg" type="image/x-icon">
+<style>
+    :root {
+      --primary: #3b82f6;
+      --primary-light: #93c5fd;
+      --primary-dark: #1d4ed8;
+      --secondary: #10b981;
+      --secondary-light: #a7f3d0;
+      --bg: #ffffff; /* ubah jadi putih */
+      --card: #ffffff; /* box jadi putih */
+      --text: #1e293b; /* teks utama lebih gelap agar kontras dengan putih */
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px rgba(0,0,0,.1);
+      --radius: 16px;
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      transition: all 0.2s ease; 
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    
+    .header {
+      text-align: center;
+      padding: 1rem 1rem; /* dipersempit */
+      background: var(--primary); /* biru */
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .main-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #ffffff; /* teks putih */
+    }
+    
+    .subtitle {
+      font-size: 1rem;
+      color: #f1f5f9;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .calculators-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    
+    .calculator-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      flex: 1;
+      min-width: 350px;
+      max-width: 450px;
+    }
+    
+    .calculator-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--primary-dark);
+      text-align: center;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary);
+    }
+    
+    /* Styles untuk Kalkulator Pengurangan Sudut */
+    .input-box {
+      width: 80px;
+      height: 80px;
+      text-align: center;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      background: #f8fafc; /* terang */
+      color: var(--text);
+    }
+    
+    .input-box:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .input-label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .section-title i {
+      color: var(--primary);
+      font-size: 20px;
+    }
+    
+    .input-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 3px;
+    }
+    
+    .result-box {
+      width: 80px;
+      height: 80px;
+      text-align: center;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(59, 130, 246, 0.1);
+      color: var(--secondary);
+    }
+    
+    .button-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 1;
+    }
+    
+    .button-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.25);
+    }
+    
+    .button-secondary {
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--muted);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 1;
+    }
+    
+    .button-secondary:hover {
+      background: rgba(255, 255, 255, 1);
+      border-color: var(--primary-light);
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+    }
+    
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 2px 0;
+    }
+    
+    .animate-result {
+      animation: pulse 0.5s ease;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+    
+    /* Styles untuk Kalkulator Mantissa */
+    .input-field {
+      position: relative;
+      flex: 1;
+    }
+    
+    .input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      outline: none;
+      background: #f8fafc;
+      color: var(--text);
+    }
+    
+    .input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+    
+    .select {
+      padding: 14px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      cursor: pointer;
+      background: #f8fafc;
+      color: var(--text);
+    }
+    
+    .select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+    
+    .btn {
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(59,130,246,0.2);
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    
+    .result-container {
+      margin-top: 24px;
+      padding: 20px;
+      background: rgba(59,130,246,0.05);
+      border-radius: 12px;
+      border: 1px dashed var(--primary-light);
+      text-align: center;
+    }
+    
+    .result-label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    
+    .result-value {
+      font-family: monospace;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+    
+    .shift-info {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    
+    /* Styles untuk Konversi Derajat ke Jam */
+    .input-label-jam {
+      display: block;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    
+    .deg-symbol, .min-symbol {
+      position: absolute;
+      right: 15px;
+      top: 42px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .formula {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(59,130,246,0.05);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+    }
+    
+    .formula-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+    
+    /* Responsivitas */
+    @media (max-width: 1200px) {
+      .calculators-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .calculator-card {
+        width: 100%;
+        max-width: 600px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .main-title {
+        font-size: 2rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+        .input-group {
+        flex-direction: row; /* tetap horizontal */
+        flex-wrap: wrap;     /* biar kalau sempit banget tetap rapi */
+        gap: 10px;
+        justify-content: center;
+    }
+      
+      .button-group {
+        flex-direction: column;
+      }
+    }
+    
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle linear infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+</style>
+
+</head>
+<body>
+  <!-- Background stars -->
+  <div class="stars" id="stars"></div>
+  
+  <header class="header">
+    <h1 class="main-title">Kalkulator Astronomi</h1>
+    <p class="subtitle">Kumpulan alat bantu hitung untuk perhitungan astronomi dan trigonometri</p>
+  </header>
+  
+  <div class="calculators-container">
+    <!-- Kalkulator 1: Pengurangan Sudut -->
+    <div class="calculator-card">
+      <h2 class="calculator-title"><i class="fas fa-calculator"></i> Pengurangan Sudut</h2>
+      
+      <div class="mb-5">
+        <div class="section-title">
+          <i class="fas fa-angle-up"></i> Sudut Awal
+        </div>
+        <div class="input-group">
+          <div class="input-container">
+            <span class="input-label">Darojah</span>
+            <input type="number" id="degrees1" class="input-box" min="0" max="360" placeholder="90">
+          </div>
+          <div class="input-container">
+            <span class="input-label">Menit</span>
+            <input type="number" id="minutes1" class="input-box" min="0" max="59" placeholder="0">
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <div class="input-container">
+            <span class="input-label">Darojah</span>
+            <input type="number" id="degrees2" class="input-box" min="0" max="360" placeholder="0">
+          </div>
+          <div class="input-container">
+            <span class="input-label">Menit</span>
+            <input type="number" id="minutes2" class="input-box" min="0" max="59" placeholder="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Hasil -->
+      <div>
+        <div class="section-title">
+          <i class="fas fa-angle-right text-blue-500"></i> Hasil Tamam
+        </div>
+        <div id="result" class="input-group">
+          <div class="input-container">
+            <span class="input-label">Darojah</span>
+            <div id="hasilDarojah" class="result-box">0</div>
+          </div>
+          <div class="input-container">
+            <span class="input-label">Menit</span>
+            <div id="hasilMenit" class="result-box">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tombol -->
+      <div class="button-group">
+        <button onclick="calculate()" class="button-primary">
+          <i class="fas fa-calculator"></i> Hitung
+        </button>
+        <button onclick="resetCalc()" class="button-secondary">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>
+    </div>
+    
+    <!-- Kalkulator 2: Mantissa 5 Desimal -->
+    <div class="calculator-card">
+      <h2 class="calculator-title"><i class="fas fa-calculator"></i> Trigonometri 5 Desimal</h2>
+      
+      <div class="input-group" style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 200px; margin: 0 auto;">
+        <!-- Input pertama -->
+        <div class="input-field">
+          <input id="a" class="input" placeholder="0,00000" inputmode="decimal" />
+        </div>
+
+        <!-- Input kedua + dropdown -->
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <div class="input-field" style="flex: 1;">
+            <input id="b" class="input" placeholder="0,00000" inputmode="decimal" />
+          </div>
+          <select id="op" class="select">
+            <option value="+">+</option>
+            <option value="-">−</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group" style="margin-top: 20px;">
+        <select id="mode" class="select">
+          <option value="log">Log Trigonometri</option>
+          <option value="sin">Trigonometri</option>
+        </select>
+        <button id="btn" class="btn">Hitung</button>
+      </div>
+
+      <div class="result-container">
+        <div class="result-label">Hasil Mantissa</div>
+        <div class="result-value" id="out">-</div>
+        <div class="shift-info" id="shift-info"></div>
+      </div>
+    </div>
+    
+    <!-- Kalkulator 3: Konversi Derajat ke Jam -->
+    <div class="calculator-card">
+      <h2 class="calculator-title"><i class="fas fa-calculator"></i> Konversi Derajat ke Jam</h2>
+      
+      <div class="input-group">
+        <div class="input-field">
+          <label class="input-label-jam">Derajat</label>
+          <input type="number" id="deg" class="input" placeholder="0" value="">
+          <span class="deg-symbol">°</span>
+        </div>
+        
+        <div class="input-field">
+          <label class="input-label-jam">Menit Busur</label>
+          <input type="number" id="min" class="input" placeholder="0" value="">
+          <span class="min-symbol">′</span>
+        </div>
+      </div>
+      
+      <button id="convertBtn" class="btn" style="width: 100%; margin-top: 10px;">Konversi ke Waktu</button>
+      
+      <div class="result-container">
+        <div class="result-label">Hasil Konversi</div>
+        <div class="result-value" id="output">-</div>
+      </div>
+      
+      <div class="formula">
+        <div class="formula-title">Rumus Konversi</div>
+        <div>1 jam = 15 derajat | 1 derajat = 4 menit waktu</div>
+      </div>
+    </div>
+  </div>
+  <script src="tamam.js"></script>
+  <script src="mantissa.js"></script>
+  <script src="jam.js"></script>
+  <script>
+    // Script untuk efek bintang di latar belakang
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const starsCount = 150;
+      
+      for (let i = 0; i < starsCount; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        
+        const size = Math.random() * 3;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        
+        star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        star.style.animationDelay = `${Math.random() * 2}s`;
+        
+        starsContainer.appendChild(star);
+      }
+    }
+    
+    createStars();
+    </script>
+</body>
+</html>
