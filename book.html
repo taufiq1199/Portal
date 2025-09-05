@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tulisan</title>
+  <link rel="icon" href="data:,">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Muhammad Taufiq">
+<meta property="og:description" content="Alat bantu mengerjakan Logaritma dan lainnya">
+<meta property="og:image" content="https://raw.githubusercontent.com/taufiq1199/Portal/main/sata.png">
+<meta property="og:url" content="https://namasite.com">
+<meta property="og:type" content="website">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/taufiq1199/Portal/main/sata.png">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Merriweather', serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      overflow-x: hidden;
+      width: 100%;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 800px;
+    }
+    
+    .book-container {
+      background: linear-gradient(to right, #f9f9f9 0%, #fff 10%);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .chapter {
+      margin-bottom: 3rem;
+      page-break-inside: avoid;
+    }
+    
+    .chapter-title {
+      color: #5a67d8;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    
+    .chapter-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 25%;
+      right: 25%;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #5a67d8, transparent);
+    }
+    
+    .text-content {
+      text-align: justify;
+      line-height: 1.8;
+    }
+    
+    .text-content p {
+      margin-bottom: 1.2rem;
+      font-size: 1.05rem;
+      color: #2d3748;
+      text-indent: 2rem;
+    }
+    
+    .footer {
+      color: white;
+      margin-top: 2rem;
+      text-align: center;
+      width: 100%;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      body {
+        padding: 0.5rem;
+      }
+      
+      .header {
+        margin-bottom: 1rem;
+      }
+      
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .header p {
+        font-size: 0.9rem;
+      }
+      
+      .book-container {
+        padding: 1.5rem;
+      }
+      
+      .chapter-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.2rem;
+      }
+      
+      .text-content p {
+        font-size: 0.95rem;
+        text-indent: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 1.3rem;
+      }
+      
+      .book-container {
+        padding: 1.2rem;
+      }
+      
+      .chapter-title {
+        font-size: 1.3rem;
+      }
+      
+      .text-content p {
+        font-size: 0.9rem;
+        text-indent: 1rem;
+        line-height: 1.6;
+      }
+    }
+    
+    /* Loading animation */
+    .loader {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    
+    .loader-dot {
+      width: 12px;
+      height: 12px;
+      margin: 0 5px;
+      background-color: #4f46e5;
+      border-radius: 50%;
+      animation: loader 1.4s infinite ease-in-out both;
+    }
+    
+    .loader-dot:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+    
+    .loader-dot:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+    
+    @keyframes loader {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+  </style>
+</head>
+<body>
+<div class="header" style="text-align:center;">
+  <div style="display:inline-block;
+              width:150px;
+              height:150px;
+              border:2px solid #333;
+              border-radius:12px;
+              overflow:hidden;
+              background:#fff;
+              box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+    <img src="ied.png" alt="IED MILAD" 
+         style="width:100%;
+                height:100%;
+                object-fit:cover;">
+  </div>
+  <p style="font-size:24px; font-weight:bold; margin-top:12px;">
+    Kepribadian dan Budi Pekerti Rasulullah SAW.
+  </p>
+</div>
+
+
+  <div class="book-container">
+    <div id="loader" class="loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+    <div id="content" style="display: none;"></div>
+  </div>
+
+  <div class="footer">
+    <p>© 2023 Buku Cerita Digital</p>
+  </div>
+
+  <script>
+    function formatContent(text) {
+      // Pisahkan teks menjadi bagian-bagian berdasarkan judul
+      const sections = text.split(/(?=\n[A-Z][A-Z\s]+\n)/);
+      let formattedContent = [];
+      
+      sections.forEach(section => {
+        if (!section.trim()) return;
+        
+        // Cari judul (teks dalam baris sendiri dengan huruf kapital semua)
+        const titleMatch = section.match(/^\n?([A-Z][A-Z\s]+)\n/);
+        let title = '';
+        let content = section;
+        
+        if (titleMatch) {
+          title = titleMatch[1].trim();
+          content = section.replace(titleMatch[0], '');
+        }
+        
+        // Bersihkan dan format konten
+        content = content.trim()
+          .replace(/\n+/g, ' ') // Ganti multiple newlines dengan spasi
+          .replace(/\s+/g, ' ') // Normalisasi spasi
+          .replace(/([.!?])\s+/g, '$1|') // Pisahkan kalimat
+          .split('|')
+          .filter(s => s.trim().length > 0);
+        
+        // Gabungkan kalimat menjadi paragraf (maksimal 5 kalimat per paragraf)
+        let paragraphs = [];
+        let currentParagraph = [];
+        
+        for (let i = 0; i < content.length; i++) {
+          currentParagraph.push(content[i]);
+          
+          if (currentParagraph.length >= 5 || i === content.length - 1) {
+            paragraphs.push(currentParagraph.join(' '));
+            currentParagraph = [];
+          }
+        }
+        
+        // Jika tidak ada paragraf, buat satu paragraf dari konten
+        if (paragraphs.length === 0 && content.length > 0) {
+          paragraphs = [content.join(' ')];
+        }
+        
+        formattedContent.push({
+          title: title,
+          paragraphs: paragraphs
+        });
+      });
+      
+      return formattedContent;
+    }
+    
+    function createContentHTML(formattedContent) {
+      let html = '';
+      
+      formattedContent.forEach(section => {
+        html += `<div class="chapter">`;
+        
+        if (section.title) {
+          html += `<h2 class="chapter-title">${section.title}</h2>`;
+        }
+        
+        html += `<div class="text-content">`;
+        
+        section.paragraphs.forEach(paragraph => {
+          html += `<p>${paragraph}</p>`;
+        });
+        
+        html += `</div></div>`;
+      });
+      
+      return html;
+    }
+
+    async function loadStory() {
+      try {
+        // Coba load dari file story.txt
+        let response;
+        let text;
+        
+        try {
+          response = await fetch('story.txt');
+          if (response.ok) {
+            text = await response.text();
+          } else {
+            throw new Error('File tidak ditemukan');
+          }
+        } catch (e) {
+          // Fallback ke teks demo jika file tidak ditemukan
+          console.log('Menggunakan teks demo');
+          text = `BENTUK TUBUH RASULULLAH SAW
+
+Rasulullah saw. bukanlah orang yang berperawakan terlalu tinggi, namun tidak pula pendek. Kulitnya tidak putih bule juga tidak sawo matang. Rambutnya ikal, tidak terlalu keriting dan tidak pula lurus kaku. Beliau diangkat Allah (menjadi rasul) dalam usia empat puluh tahun. Beliau tinggal di Mekkah (sebagai Rasul) sepuluh tahun dan di madinah sepuluh tahun. Beliau pulang ke Rahmatullah dan tidak pula lurus kaku, melainkan ikal bergelombang. Badannya tidak gemuk.
+
+CIRI-CIRI FISIK RASULULLAH SAW
+
+Rasulullah memiliki postur tubuh yang proporsional, tidak terlalu tinggi dan tidak terlalu pendek. Beliau memiliki bahu yang bidang dan kuat. Rambutnya hitam, sedikit berombak, dan mencapai pundaknya. Jenggotnya lebat dan terawat rapi. Pipinya halus dan tidak berjerawat. Matanya hitam dan bulu matanya panjang. Hidungnya mancung dan mulutnya sedang, tidak terlalu lebar dan tidak terlalu kecil. Gigi-gigi depannya agak renggang dan berwarna putih bersih. Lehernya jernih seperti perak. Dadanya bidang dan perutnya rata. Telapak tangan dan kakinya tebal. Ketika berjalan, langkahnya mantap dan penuh wibawa. Suaranya merdu dan jelas pengucapannya. Senyumnya menawan dan membuat orang yang melihatnya merasa tenang.
+
+AKHLAK RASULULLAH SAW
+
+Rasulullah saw. adalah manusia yang paling mulia akhlaknya. Beliau selalu jujur dalam perkataan dan perbuatan, sehingga diberi gelar Al-Amin (yang terpercaya). Beliau sangat penyayang terhadap anak-anak, lemah lembut terhadap orang tua, dan baik hati terhadap semua orang. Rasulullah tidak pernah membalas kejahatan dengan kejahatan, tetapi selalu memaafkan. Beliau hidup sederhana, tidak sombong, dan selalu membantu orang yang membutuhkan. Sikapnya yang santun dan bijaksana membuat banyak orang tertarik kepada Islam.`;
+        }
+        
+        const loader = document.getElementById('loader');
+        const contentDiv = document.getElementById('content');
+        
+        // Format konten dengan rapi
+        const formattedContent = formatContent(text);
+        
+        // Buat HTML untuk konten
+        contentDiv.innerHTML = createContentHTML(formattedContent);
+        
+        // Sembunyikan loader dan tampilkan konten
+        loader.style.display = 'none';
+        contentDiv.style.display = 'block';
+        
+      } catch (error) {
+        console.error('Error:', error);
+        const loader = document.getElementById('loader');
+        const contentDiv = document.getElementById('content');
+        
+        loader.style.display = 'none';
+        contentDiv.style.display = 'block';
+        contentDiv.innerHTML = `
+          <div class="chapter">
+            <h2 class="chapter-title">Error</h2>
+            <div class="text-content">
+              <p>Terjadi kesalahan dalam memuat cerita.</p>
+              <p>Pastikan file story.txt ada di direktori yang sama.</p>
+              <p>Detail error: ${error.message}</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Load story ketika halaman siap
+    document.addEventListener('DOMContentLoaded', loadStory);
+  </script>
+</body>
+</html>

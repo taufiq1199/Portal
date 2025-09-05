@@ -597,6 +597,9 @@
         <div class="sidebar-menu">
             <h4>Ilmu Falak</h4>
             <ul>
+                                <li>
+                    <a href="book.html"><i class="fas fa-book"></i> Ied Milad</a>
+                </li>
                 <li>
                     <a href="algoritma.html"><i class="fas fa-square-root-alt"></i> Logaritma</a>
                 </li>
@@ -605,9 +608,6 @@
                 </li>
                 <li>
                     <a href="kabisat.html"><i class="fas fa-atom"></i> Kabisat</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fas fa-globe"></i> Geodesi</a>
                 </li>
             </ul>
         </div>
@@ -619,7 +619,7 @@
     <!-- Main Content -->
     <main id="main">
         <section class="hero">
-            <h1>Alat Bantu</h1>
+            <h1>Halaman sederhana</h1>
             <p>Membantu dalam pengerjaan Logaritma dan lainnya</p>
         </section>
 
@@ -717,13 +717,13 @@
                 const href = item.getAttribute('href');
                 if (href && href.endsWith('.html')) {
                     const title = item.textContent.trim();
-                    const discipline = 'Ilmu Falak';
+                    const discipline = 'Pengetahuan';
                     
                     htmlArticles.push({
                         id: href.replace('.html', ''),
                         title: title,
                         discipline: discipline,
-                        description: `Artikel tentang ${title} dalam bidang ${discipline}`,
+                        description: `Semoga ${title} bermanfaat untuk bertambahnya ilmu ${discipline} Anda`,
                         htmlFile: href
                     });
                 }
